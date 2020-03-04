@@ -1,14 +1,15 @@
 package com.gleb.springintrodiction.controller;
 
+import com.gleb.springintrodiction.dto.Cars;
 import com.gleb.springintrodiction.dto.CarsDto;
 import com.gleb.springintrodiction.service.CarsService;
 import com.gleb.springintrodiction.service.CarsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 @RestController
 public class CarsController {
@@ -17,9 +18,9 @@ public class CarsController {
     private CarsService carsService;
 
     @RequestMapping(value = "/carXml", method = RequestMethod.GET)
-    public CarsDto getXml() {
-        return new CarsDto("testJsonXml", 1);
-    }
+    public List<Cars> getXml() {
+        return CarsServiceImpl.getCarsDB();
+       }
 
     @GetMapping("/cars")
     public ResponseEntity getCarsByYear(@RequestParam (name = "year", required = false) Integer year) {
@@ -31,8 +32,8 @@ public class CarsController {
     }
 
     @PostMapping("/cars")
-    public ResponseEntity addCar(@RequestBody CarsDto carsDto) {
-        boolean isSucceed = carsService.addCar(carsDto);
+    public ResponseEntity addCar(@RequestBody Cars cars) {
+        boolean isSucceed = carsService.addCar(cars);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         } else {

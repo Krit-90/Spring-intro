@@ -1,48 +1,47 @@
 package com.gleb.springintrodiction.service;
 
+import com.gleb.springintrodiction.dto.Cars;
 import com.gleb.springintrodiction.dto.CarsDto;
 import org.springframework.stereotype.Service;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 @Service
 public class CarsServiceImpl implements CarsService {
+    private static List<Cars> carsDB;
+    private static List<Cars> temp = new ArrayList();
+    private static CarsDto carsDto = new CarsDto();
 
-    @XmlElement
-    private static List<CarsDto> carsDB = new ArrayList<>();
-    static {
-        carsDB.add(new CarsDto("Shelby GT500", 1967));
-        carsDB.add(new CarsDto("Impala SS", 1967));
-        carsDB.add(new CarsDto("Pontiac GTO", 1969));
-        carsDB.add(new CarsDto("Porsche 911 ", 1973));
+    static{
+        temp.add(new Cars("Shelby GT500", 1967));
+        temp.add(new Cars("Impala SS", 1967));
+        temp.add(new Cars("Pontiac GTO", 1969));
+        temp.add(new Cars("Porsche 911 ", 1973));
+        carsDto.setCarsList(temp);
+        carsDB = carsDto.getCarsList();
     }
 
-    public static List<CarsDto> getCarsDB() {
+
+    public static List<Cars> getCarsDB() {
         return carsDB;
     }
 
     @Override
-    public boolean addCar(CarsDto carsDto) {
-        return carsDB.add(carsDto);
+    public boolean addCar(Cars cars) {
+        return carsDB.add(cars);
     }
 
     @Override
-    public List<CarsDto> getCarByYear(Integer year) {
-        return carsDB.stream().filter(carsDto -> carsDto.getYear().equals(year))
+    public List<Cars> getCarByYear(Integer year) {
+        return carsDB.stream().filter(cars -> cars.getYear().equals(year))
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean updateCar(String model, Integer year) {
         if (isContainCar(model)) {
-        carsDB.stream().filter(carsDto -> carsDto.getModel().equals(model))
+        carsDB.stream().filter(cars -> cars.getModel().equals(model))
                 .findFirst().get().setYear(year);
         return true;
         } else {
@@ -51,11 +50,11 @@ public class CarsServiceImpl implements CarsService {
     }
 
     private boolean isContainCar(String model) {
-        return carsDB.stream().anyMatch(carsDto -> carsDto.getModel().equals(model));
+        return carsDB.stream().anyMatch(cars -> cars.getModel().equals(model));
     }
 
     @Override
     public boolean removeCar(String model) {
-        return carsDB.removeIf(carsDto -> carsDto.getModel().equals(model));
+        return carsDB.removeIf(cars -> cars.getModel().equals(model));
     }
 }

@@ -1,15 +1,17 @@
 package com.gleb.springintrodiction.service;
 
 import java.util.List;
+
+import com.gleb.springintrodiction.dto.Cars;
 import com.gleb.springintrodiction.dto.CarsDto;
 
 public interface CarsService {
     /**
      * Метод добавления машины в БД
-     * @param carsDto ДТО машины
+     * @param cars ДТО машины
      * @return true, если добавлено удачно, false в противном случае
      */
-    boolean addCar(CarsDto carsDto);
+    boolean addCar(Cars cars);
 
 /*    *//**
      *Метод получения списка всех машин из БД
@@ -22,7 +24,7 @@ public interface CarsService {
      * @param year Год выпуска машины
      * @return Отфильтрованный список машин
      */
-    List<CarsDto> getCarByYear(Integer year);
+    List<Cars> getCarByYear(Integer year);
 
     /**
      * *Метод изменения года выпуска машины
