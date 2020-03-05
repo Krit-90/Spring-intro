@@ -4,7 +4,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+// TODO: Здесь можно явно добавить еще всяких полей
 @XmlAccessorType(XmlAccessType.FIELD)
+// TODO: Во множественном числе сущности не называем
 public class Cars {
     @XmlElement
     private String model;

@@ -13,6 +13,7 @@ public interface CarsService {
      */
     boolean addCar(Cars cars);
 
+    // TODO: Закомеченный код не коммитим
 /*    *//**
      *Метод получения списка всех машин из БД
      * @return Список машин
