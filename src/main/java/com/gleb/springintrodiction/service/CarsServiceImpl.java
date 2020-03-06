@@ -70,7 +70,7 @@ public class CarsServiceImpl implements CarsService {
         return carDtoDB.removeIf(carDto -> carDto.getId().equals(id));
     }
 
-    // TODO: private методы всегда в самом низу класса
+    // TODO: private методы всегда в самом низу класса - OK
     // TODO: Этот код используется один раз, возможно нет смысла выносить в отдельный метод - OK
     // TODO: Я хотел улучшить читабельность кода, а то слишком длинная строчка в условии
     private boolean isContainCar(Integer id) {
