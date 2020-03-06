@@ -1,45 +1,65 @@
 package com.gleb.springintrodiction.controller;
 
-import com.gleb.springintrodiction.dto.Cars;
-import com.gleb.springintrodiction.dto.CarsDto;
+import com.gleb.springintrodiction.dto.CarDto;
+import com.gleb.springintrodiction.dto.CarsListDto;
 import com.gleb.springintrodiction.service.CarsService;
-import com.gleb.springintrodiction.service.CarsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import java.io.StringWriter;
 import java.util.List;
 
 @RestController
 public class CarsController {
-
     @Autowired
     private CarsService carsService;
 
-    // TODO: Либо делай все через @RequestMapping, либо все через @Get/Post/Put/DeleteMapping, но не вперемешку
-    // TODO: Никаких "xml" не должно быть в URL, должен быть один эндпоинт на все, разница лишь в заголовке Accept
-    @RequestMapping(value = "/carXml", method = RequestMethod.GET)
-    public List<Cars> getXml() {
-        // TODO: Зачем пользоваться статичным методом из класса если у тебя сверху заавтовайрен готовый инстанс?
-        return CarsServiceImpl.getCarsDB();
-       }
-
-       // TODO: Здесь хорошо бы добавить фильтрацию по ряду признаков, а не только по годам. Пускай на вход приходит такая же DTO и по всем не null полям делай фильтрацию
+    // TODO: Здесь хорошо бы добавить фильтрацию по ряду признаков, а не только по годам.
+    //  Пускай на вход приходит такая же DTO и по всем не null полям делай фильтрацию - OK?
+    //  Как здесь сократить количество условий, если фильтровать Только через двойной filter,
+    //  то когда один из параметров null, то && не пропустить машину в список.
     @GetMapping("/cars")
-    public ResponseEntity getCarsByYear(@RequestParam (name = "year", required = false) Integer year) {
-        // TODO: Форматирование сломалось чутка. Юзай Ctrl + Alt + L
-            if (year == null) {
-                // TODO: Опять статический вызов, хотя ниже обращение к инстансу
-                return ResponseEntity.ok(CarsServiceImpl.getCarsDB());
-            } else {
-                return ResponseEntity.ok(carsService.getCarByYear(year));
+    public ResponseEntity getCarsByYear(HttpServletRequest request, @RequestBody CarDto carDto) {
+        String accept = request.getHeader(HttpHeaders.ACCEPT);
+        CarsListDto content = new CarsListDto();
+        if (carDto.getYear() == null & carDto.getModel() == null) {
+            // TODO: Опять статический вызов, хотя ниже обращение к инстансу - OK
+            content.setCarDB(carsService.getCarsDtoDB());
+        } else {
+            if (carDto.getYear() != null & carDto.getModel() != null) {
+                content.setCarDB(carsService.getCarsByModelAndYear(carDto.getModel(), carDto.getYear()));
             }
+            if (carDto.getModel() == null) {
+                content.setCarDB(carsService.getCarsByYear(carDto.getYear()));
+            } else{
+                content.setCarDB(carsService.getCarsByModel(carDto.getModel()));
+            }
+        }
+        if(accept.equals("application/xml")) {
+            StringWriter stringWriter = new StringWriter();
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(CarsListDto.class);
+                Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+                jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                jaxbMarshaller.marshal(content, stringWriter);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+            return ResponseEntity.ok(stringWriter.toString());
+        }
+        return  ResponseEntity.ok(content);
     }
 
     @PostMapping("/cars")
-    public ResponseEntity addCar(@RequestBody Cars cars) {
-        boolean isSucceed = carsService.addCar(cars);
+    public ResponseEntity addCar(@RequestBody CarDto carDto) {
+        boolean isSucceed = carsService.addCar(carDto);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         } else {
@@ -48,22 +68,20 @@ public class CarsController {
     }
 
     @PutMapping("/cars")
-    public ResponseEntity updateCarYear(@RequestParam(name = "model") String model,
-                                        @RequestParam(name = "year") Integer year) {
-        // TODO: Лишние скобки
-        boolean isSucceed = (carsService.updateCar(model, year));
+    public ResponseEntity updateCarYear(@RequestParam(name = "id") Integer id,
+                                        @RequestBody CarDto carDto) {
+        boolean isSucceed = carsService.updateCar(id, carDto);
         if (isSucceed) {
             return ResponseEntity.ok().build();
-        } else {
-            // TODO: Здесь можно добавить еще одну DTO с одним полем - текстом ошибки, его возвращаем телом вместе с кодом ошибки
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+            // TODO: Здесь можно добавить еще одну DTO с одним полем - текстом ошибки, его возвращаем телом вместе с кодом ошибки
+            //  Можно пояснить, еще одну CarDto или объект нового класса,допустим, ErrorDto, с полем String текстОшибки?
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @DeleteMapping("/cars")
-    public ResponseEntity removeCar(@RequestParam(name = "model") String model) {
-        // TODO: Лишние скобки
-        boolean isSucceed = (carsService.removeCar(model));
+    public ResponseEntity removeCar(@RequestParam(name = "id") Integer id) {
+        boolean isSucceed = carsService.removeCar(id);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         } else {

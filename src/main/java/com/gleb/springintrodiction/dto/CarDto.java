@@ -2,23 +2,25 @@ package com.gleb.springintrodiction.dto;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 
-// TODO: Здесь можно явно добавить еще всяких полей
+// TODO: Здесь можно явно добавить еще всяких полей -
+//  Это значит что не нужно каждое поле класса объявлять @XmlElement?
 @XmlAccessorType(XmlAccessType.FIELD)
-// TODO: Во множественном числе сущности не называем
-public class Cars {
-    @XmlElement
+// TODO: Во множественном числе сущности не называем - OK
+public class CarDto {
+
+
+    private static Integer counter = 0;
+    private final Integer id = counter++;
     private String model;
-    @XmlElement
     private Integer year;
 
-    public Cars(String model, Integer year) {
+    public CarDto(String model, Integer year) {
         this.model = model;
         this.year = year;
     }
 
-    public Cars() {
+    public CarDto() {
     }
 
     public String getModel() {
@@ -36,4 +38,9 @@ public class Cars {
     public void setYear(Integer year) {
         this.year = year;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
 }

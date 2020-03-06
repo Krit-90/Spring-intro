@@ -2,43 +2,64 @@ package com.gleb.springintrodiction.service;
 
 import java.util.List;
 
-import com.gleb.springintrodiction.dto.Cars;
-import com.gleb.springintrodiction.dto.CarsDto;
+import com.gleb.springintrodiction.dto.CarDto;
 
 public interface CarsService {
+
+    /**
+     * Метод получения всего всписка машин
+     *
+     * @return БД машин
+     */
+    List<CarDto> getCarsDtoDB();
+
     /**
      * Метод добавления машины в БД
-     * @param cars ДТО машины
+     *
+     * @param carDto ДТО машины
      * @return true, если добавлено удачно, false в противном случае
      */
-    boolean addCar(Cars cars);
-
-    // TODO: Закомеченный код не коммитим
-/*    *//**
-     *Метод получения списка всех машин из БД
-     * @return Список машин
-     *//*
-    List<CarsDto> getCarsDB();*/
+    boolean addCar(CarDto carDto);
 
     /**
-     *Метод получения списка машин соответствующего года выпуска
+     * Метод получения списка машин соответствующего года выпуска
+     *
      * @param year Год выпуска машины
      * @return Отфильтрованный список машин
      */
-    List<Cars> getCarByYear(Integer year);
+    List<CarDto> getCarsByYear(Integer year);
 
     /**
-     * *Метод изменения года выпуска машины
-     * @param model Название искомой машины
-     * @param year Год выпуска, на который будем менять
-     * @return true, если данная модель есть в БД, false в противном случае
+     * Метод получения списка машин соответствующей модели
+     *
+     * @param model Модель машины
+     * @return Отфильтрованный список машин
      */
-    boolean updateCar(String model, Integer year);
+    List<CarDto> getCarsByModel(String model);
 
     /**
-     *Метод удаления машины из БД
-     * @param model Название машины
+     * Метод получения списка машин соответствующей модели и года
+     *
+     * @param year  Год выпуска модели
+     * @param model Модель машины
+     * @return Отфильтрованный список машин
+     */
+    List<CarDto> getCarsByModelAndYear(String model, Integer year);
+
+    /**
+     * *Метод изменения года выпуска и/или модели машины
+     *
+     * @param id Id искомой машины
+     * @param c  Объект машины от клиента, данные которой будем подставлять
+     * @return true, если данная модель есть в БД и обновление прошло успешно, false в противном случае
+     */
+    boolean updateCar(Integer id, CarDto c);
+
+    /**
+     * Метод удаления машины из БД
+     *
+     * @param id Id искомой машины машины
      * @return true, если удаление прошло удчано, false в противном случае
      */
-    boolean removeCar(String model);
+    boolean removeCar(Integer id);
 }
