@@ -43,13 +43,10 @@ public class CarsServiceImpl implements CarsService {
                 .collect(Collectors.toList());
     }
 
-    // TODO: Строковое поле "model" - плохой кандидат, чтобы на его основании искать объект для обновления. Лучше подойдет id - OK
-    // TODO: Обновление должно работать так: на вход приходит объект машины,
-    //  ты берешь оттуда все не null поля и обновляешь их в конечной сущности, которую ты нашел по id - OK
     @Override
     public boolean updateCar(Integer id, CarDto c) {
-        // TODO: Форматируй код - OK
         if (isContainCar(id)) {
+            // TODO: Если возвращается Optional, это значит, что нельзя просто взять и сделать .get()
             CarDto searchingCarDto = carDtoDB.stream().filter(carDto -> carDto.getId().equals(id)).findFirst().get();
             if (c.getModel() != null) {
                 searchingCarDto.setModel(c.getModel());
@@ -58,20 +55,15 @@ public class CarsServiceImpl implements CarsService {
                 searchingCarDto.setYear(c.getYear());
             }
             return true;
-            // TODO: else можно опустить, можно почитать вот тут на эту тему: https://habr.com/ru/post/348074/ - OK
         }
         return false;
     }
 
-    // TODO: По аналогии, удаляй на основании id - OK
     @Override
     public boolean removeCar(Integer id) {
         return carDtoDB.removeIf(carDto -> carDto.getId().equals(id));
     }
 
-    // TODO: private методы всегда в самом низу класса - OK
-    // TODO: Этот код используется один раз, возможно нет смысла выносить в отдельный метод - OK
-    // TODO: Я хотел улучшить читабельность кода, а то слишком длинная строчка в условии
     private boolean isContainCar(Integer id) {
         return carDtoDB.stream().anyMatch(carDto -> carDto.getId().equals(id));
     }

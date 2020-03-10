@@ -4,10 +4,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-// TODO: Во множественном числе сущности не называем - OK
 public class CarDto {
 
 
+    // TODO: Вот это что-то совсем монструозное
     private static Integer counter = 0;
     private final Integer id = counter++;
     private String model;

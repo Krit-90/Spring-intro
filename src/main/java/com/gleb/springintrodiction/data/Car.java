@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 public class Car {
 
+    // TODO: Модификатор доступа забыл
     @Id
     @GeneratedValue
     Long id;

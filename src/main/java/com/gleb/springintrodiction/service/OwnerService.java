@@ -4,6 +4,7 @@ import com.gleb.springintrodiction.dto.OwnerDto;
 
 import java.util.List;
 
+// TODO: А где реализация?
 public interface OwnerService {
     /**
      * Метод получения всего списка владельцев машин

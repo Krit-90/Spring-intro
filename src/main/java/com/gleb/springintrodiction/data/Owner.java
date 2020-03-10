@@ -19,6 +19,7 @@ public class Owner {
             name = "owners_cars",
             joinColumns = @JoinColumn(name = "owner_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
+    // TODO: Зачем инициализация?
     private List<Car> cars = new ArrayList();
 
 

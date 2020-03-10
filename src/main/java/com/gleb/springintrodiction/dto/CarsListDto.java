@@ -8,6 +8,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 // TODO: Предыдущий класс - это CarDto, этот скорее CarsListDto = OK
 public class CarsListDto {
+    // TODO: Почему static?
     private static List<CarDto> carDB;
 
     public CarsListDto() {

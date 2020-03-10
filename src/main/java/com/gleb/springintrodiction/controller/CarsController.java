@@ -20,18 +20,14 @@ public class CarsController {
     @Autowired
     private CarsService carsService;
 
-    // TODO: Здесь хорошо бы добавить фильтрацию по ряду признаков, а не только по годам.
-    //  Пускай на вход приходит такая же DTO и по всем не null полям делай фильтрацию - OK?
-    //  Как здесь сократить количество условий, если фильтровать Только через двойной filter,
-    //  то когда один из параметров null, то && не пропустить машину в список.
     @GetMapping("/cars")
     public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestBody CarDto carDto) {
         String accept = request.getHeader(HttpHeaders.ACCEPT);
         CarsListDto content = new CarsListDto();
         if (carDto.getYear() == null & carDto.getModel() == null) {
-            // TODO: Опять статический вызов, хотя ниже обращение к инстансу - OK
             content.setCarDB(carsService.getCarsDtoDB());
         } else {
+            // TODO: У тебя должен быть в сервисе один метод, принимающий на вход один объект - carDto и дальше там уже должна быть логика по фильтрации
             if (carDto.getYear() != null & carDto.getModel() != null) {
                 content.setCarDB(carsService.getCarsByModelAndYear(carDto.getModel(), carDto.getYear()));
             }
@@ -75,6 +71,7 @@ public class CarsController {
         }
         // TODO: Здесь можно добавить еще одну DTO с одним полем - текстом ошибки, его возвращаем телом вместе с кодом ошибки
         //  Можно пояснить, еще одну CarDto или объект нового класса,допустим, ErrorDto, с полем String текстОшибки?
+        // TODO: ErrorDto с полем errorMessage вполне подойдет
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
