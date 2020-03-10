@@ -1,10 +1,10 @@
 package com.gleb.springintrodiction.data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+@Table(name = "cars")
+@Entity
 public class Car {
 
     @Id
@@ -15,7 +15,8 @@ public class Car {
     @Column
     private Integer year;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "owners")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
     private List<Owner> owners;
 
     public Car(String model, Integer year) {

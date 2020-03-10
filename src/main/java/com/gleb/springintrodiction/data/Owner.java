@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "owner")
+@Table(name = "owners")
 @Entity
 public class Owner {
     @Id
@@ -14,8 +14,9 @@ public class Owner {
     private String firstName;
     @Column
     private String lastName;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    @JoinTable(name = "owner_car",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "owners_cars",
             joinColumns = @JoinColumn(name = "owner_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
     private List<Car> cars = new ArrayList();
