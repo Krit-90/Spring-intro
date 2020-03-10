@@ -8,13 +8,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import java.io.StringWriter;
-import java.util.List;
 
 @RestController
 public class CarsController {
@@ -26,7 +25,7 @@ public class CarsController {
     //  Как здесь сократить количество условий, если фильтровать Только через двойной filter,
     //  то когда один из параметров null, то && не пропустить машину в список.
     @GetMapping("/cars")
-    public ResponseEntity getCarsByYear(HttpServletRequest request, @RequestBody CarDto carDto) {
+    public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestBody CarDto carDto) {
         String accept = request.getHeader(HttpHeaders.ACCEPT);
         CarsListDto content = new CarsListDto();
         if (carDto.getYear() == null & carDto.getModel() == null) {
@@ -38,11 +37,11 @@ public class CarsController {
             }
             if (carDto.getModel() == null) {
                 content.setCarDB(carsService.getCarsByYear(carDto.getYear()));
-            } else{
+            } else {
                 content.setCarDB(carsService.getCarsByModel(carDto.getModel()));
             }
         }
-        if(accept.equals("application/xml")) {
+        if (accept.equals("application/xml")) {
             StringWriter stringWriter = new StringWriter();
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(CarsListDto.class);
@@ -54,7 +53,7 @@ public class CarsController {
             }
             return ResponseEntity.ok(stringWriter.toString());
         }
-        return  ResponseEntity.ok(content);
+        return ResponseEntity.ok(content);
     }
 
     @PostMapping("/cars")
@@ -74,9 +73,9 @@ public class CarsController {
         if (isSucceed) {
             return ResponseEntity.ok().build();
         }
-            // TODO: Здесь можно добавить еще одну DTO с одним полем - текстом ошибки, его возвращаем телом вместе с кодом ошибки
-            //  Можно пояснить, еще одну CarDto или объект нового класса,допустим, ErrorDto, с полем String текстОшибки?
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        // TODO: Здесь можно добавить еще одну DTO с одним полем - текстом ошибки, его возвращаем телом вместе с кодом ошибки
+        //  Можно пояснить, еще одну CarDto или объект нового класса,допустим, ErrorDto, с полем String текстОшибки?
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @DeleteMapping("/cars")

@@ -3,8 +3,6 @@ package com.gleb.springintrodiction.dto;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-// TODO: Здесь можно явно добавить еще всяких полей -
-//  Это значит что не нужно каждое поле класса объявлять @XmlElement?
 @XmlAccessorType(XmlAccessType.FIELD)
 // TODO: Во множественном числе сущности не называем - OK
 public class CarDto {

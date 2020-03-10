@@ -1,7 +1,6 @@
 package com.gleb.springintrodiction.service;
 
 import java.util.List;
-
 import com.gleb.springintrodiction.dto.CarDto;
 
 public interface CarsService {
