@@ -7,17 +7,14 @@ import java.util.List;
 @Entity
 public class Car {
 
-    // TODO: Модификатор доступа забыл
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
     @Column
     private String model;
     @Column
     private Integer year;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "cars")
     private List<Owner> owners;
 
     public Car(String model, Integer year) {

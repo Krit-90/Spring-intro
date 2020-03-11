@@ -1,7 +1,8 @@
 package com.gleb.springintrodiction.data;
 
+import com.sun.xml.bind.v2.TODO;
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "owners")
@@ -14,18 +15,14 @@ public class Owner {
     private String firstName;
     @Column
     private String lastName;
+    // TODO: Третью таблицу с id - ми делает, а сждойнить, к примеру, к спсику машин имя и фамилию владельца не получается
+    //  Может только в ManyToOne можно так?
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "owners_cars",
             joinColumns = @JoinColumn(name = "owner_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
-    // TODO: Зачем инициализация?
-    private List<Car> cars = new ArrayList();
-
-
-    public List<Car> getCars () {
-        return cars;
-    }
+    private List<Car> cars;
 
     public Owner(Long id, String firstName, String lastName) {
         this.id = id;
@@ -58,5 +55,13 @@ public class Owner {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
     }
 }

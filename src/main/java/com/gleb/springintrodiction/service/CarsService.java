@@ -5,9 +5,8 @@ import com.gleb.springintrodiction.dto.CarDto;
 
 public interface CarsService {
 
-    // TODO: Опечатка в доке
     /**
-     * Метод получения всего всписка машин
+     * Метод получения всего списка машин
      *
      * @return БД машин
      */
@@ -40,11 +39,10 @@ public interface CarsService {
     /**
      * Метод получения списка машин соответствующей модели и года
      *
-     * @param year  Год выпуска модели
-     * @param model Модель машины
+     * @param carDto Dto машины у котрой берем искомые данные
      * @return Отфильтрованный список машин
      */
-    List<CarDto> getCarsByModelAndYear(String model, Integer year);
+    List<CarDto> getCarsByModelAndYear(CarDto carDto);
 
     /**
      * *Метод изменения года выпуска и/или модели машины

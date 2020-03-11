@@ -2,6 +2,7 @@ package com.gleb.springintrodiction.controller;
 
 import com.gleb.springintrodiction.dto.CarDto;
 import com.gleb.springintrodiction.dto.CarsListDto;
+import com.gleb.springintrodiction.dto.ErrorDto;
 import com.gleb.springintrodiction.service.CarsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,14 +28,8 @@ public class CarsController {
         if (carDto.getYear() == null & carDto.getModel() == null) {
             content.setCarDB(carsService.getCarsDtoDB());
         } else {
-            // TODO: У тебя должен быть в сервисе один метод, принимающий на вход один объект - carDto и дальше там уже должна быть логика по фильтрации
             if (carDto.getYear() != null & carDto.getModel() != null) {
-                content.setCarDB(carsService.getCarsByModelAndYear(carDto.getModel(), carDto.getYear()));
-            }
-            if (carDto.getModel() == null) {
-                content.setCarDB(carsService.getCarsByYear(carDto.getYear()));
-            } else {
-                content.setCarDB(carsService.getCarsByModel(carDto.getModel()));
+                content.setCarDB(carsService.getCarsByModelAndYear(carDto));
             }
         }
         if (accept.equals("application/xml")) {
@@ -69,10 +64,9 @@ public class CarsController {
         if (isSucceed) {
             return ResponseEntity.ok().build();
         }
-        // TODO: Здесь можно добавить еще одну DTO с одним полем - текстом ошибки, его возвращаем телом вместе с кодом ошибки
-        //  Можно пояснить, еще одну CarDto или объект нового класса,допустим, ErrorDto, с полем String текстОшибки?
-        // TODO: ErrorDto с полем errorMessage вполне подойдет
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     @DeleteMapping("/cars")
