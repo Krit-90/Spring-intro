@@ -2,6 +2,7 @@ package com.gleb.springintrodiction.repository;
 
 import com.gleb.springintrodiction.data.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -13,6 +14,7 @@ public interface OwnerRepository extends JpaRepository<Owner, Long> {
     @Query(value = "SELECT * FROM Owners o WHERE o.id = id", nativeQuery = true)
     Owner findOwnersById(Long id);
 
-    @Query(value = "UPDATE owners SET first_name = ?1 last_name = ?2 WHERE id=?3", nativeQuery = true)
+    @Modifying
+    @Query(value = "UPDATE Owners own SET own.first_name = ? own.last_name = ? WHERE own.id=?", nativeQuery = true)
     void update(String firstName, String lastName, Long id);
 }

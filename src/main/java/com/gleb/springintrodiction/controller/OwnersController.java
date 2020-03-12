@@ -48,6 +48,7 @@ public class OwnersController {
 
     @PostMapping("/owners")
     public ResponseEntity addOwner(@RequestBody OwnerDto ownerDto) {
+        ownerService.addOwner(ownerDto);
         return ResponseEntity.ok().build();
     }
 
