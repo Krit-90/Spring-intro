@@ -1,6 +1,7 @@
 package com.gleb.springintrodiction.service;
 
 import java.util.List;
+import com.gleb.springintrodiction.data.Car;
 import com.gleb.springintrodiction.dto.CarDto;
 
 public interface CarsService {
@@ -60,4 +61,18 @@ public interface CarsService {
      * @return true, если удаление прошло удчано, false в противном случае
      */
     boolean removeCar(Integer id);
+
+    /**
+     * Метод маппинга списка машин в список без закрытой информации(например id)
+     * @param carList Список машин
+     * @return Список для передачи клиенту
+     */
+    List<CarDto> mapCarToCarDto(List<Car> carList);
+
+    /**
+     * Метод маппинга списка машин от клиента в список для базы данных
+     * @param carList Список машин владельца
+     * @return Список для передачи в базу
+     */
+    List<Car> mapCarDtoToCar(List<CarDto> carList);
 }

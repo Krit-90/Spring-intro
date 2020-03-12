@@ -1,9 +1,9 @@
 package com.gleb.springintrodiction.controller;
 
-import com.gleb.springintrodiction.dto.CarDto;
 import com.gleb.springintrodiction.dto.ContentXml;
 import com.gleb.springintrodiction.dto.ErrorDto;
-import com.gleb.springintrodiction.service.CarsService;
+import com.gleb.springintrodiction.dto.OwnerDto;
+import com.gleb.springintrodiction.service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,21 +16,19 @@ import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
 
 @RestController
-public class CarsController {
+public class OwnersController {
     @Autowired
-    private CarsService carsService;
+    private OwnerService ownerService;
 
-
-    // TODO Не может при запросе найти требуемое тело запроса Required request body is missing
-    @GetMapping("/cars")
-    public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestBody CarDto carDto) {
+    @GetMapping("/owners")
+    public ResponseEntity getOwnersByFirstNameAndLastName(HttpServletRequest request, @RequestBody OwnerDto ownerDto) {
         String accept = request.getHeader(HttpHeaders.ACCEPT);
         ContentXml content = new ContentXml();
-        if (carDto.getYear() == null & carDto.getModel() == null) {
-            content.setList(carsService.getCarsDtoDB());
+        if (ownerDto.getFirstName() == null & ownerDto.getLastName() == null) {
+            content.setList(ownerService.getOwnerDtoDB());
         } else {
-            if (carDto.getYear() != null & carDto.getModel() != null) {
-                content.setList(carsService.getCarsByModelAndYear(carDto));
+            if (ownerDto.getFirstName() != null & ownerDto.getLastName() != null) {
+                content.setList(ownerService.getOwnerByFirstNameAndLastName(ownerDto.getFirstName(), ownerDto.getLastName()));
             }
         }
         if (accept.equals("application/xml")) {
@@ -48,20 +46,16 @@ public class CarsController {
         return ResponseEntity.ok(content);
     }
 
-    @PostMapping("/cars")
-    public ResponseEntity addCar(@RequestBody CarDto carDto) {
-        boolean isSucceed = carsService.addCar(carDto);
-        if (isSucceed) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @PostMapping("/owners")
+    public ResponseEntity addOwner(@RequestBody OwnerDto ownerDto) {
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/cars")
-    public ResponseEntity updateCarYear(@RequestParam(name = "id") Integer id,
-                                        @RequestBody CarDto carDto) {
-        boolean isSucceed = carsService.updateCar(id, carDto);
+
+    @PutMapping("/owners")
+    public ResponseEntity updateOwner(@RequestParam(name = "id") Long id,
+                                      @RequestBody OwnerDto ownerDto) {
+        boolean isSucceed = ownerService.updateOwner(id, ownerDto);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         }
@@ -70,14 +64,13 @@ public class CarsController {
                 .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @DeleteMapping("/cars")
-    public ResponseEntity removeCar(@RequestParam(name = "id") Integer id) {
-        boolean isSucceed = carsService.removeCar(id);
+    @DeleteMapping("/owners")
+    public ResponseEntity removeOwner(@RequestParam(name = "id") Long id) {
+        boolean isSucceed = ownerService.removeOwner(id);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

@@ -1,9 +1,9 @@
 package com.gleb.springintrodiction.service;
 
+import com.gleb.springintrodiction.data.Car;
 import com.gleb.springintrodiction.dto.CarDto;
-import com.gleb.springintrodiction.dto.CarsListDto;
+import com.gleb.springintrodiction.dto.ContentXml;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,8 +13,8 @@ public class CarsServiceImpl implements CarsService {
     private List<CarDto> carDtoDB;
 
     public CarsServiceImpl() {
-        CarsListDto carsListDto = new CarsListDto();
-        carDtoDB = carsListDto.getCarDB();
+        ContentXml carsListDto = new ContentXml();
+        carDtoDB = carsListDto.getList();
     }
 
     public List<CarDto> getCarsDtoDB() {
@@ -45,8 +45,9 @@ public class CarsServiceImpl implements CarsService {
             return carDtoDB.stream().filter(c -> carDto.getModel().equals(carDto.getModel()) &&
                     carDto.getYear().equals(carDto.getYear()))
                     .collect(Collectors.toList());
-        } if (carDto.getModel() == null) {
-            return  getCarsByYear(carDto.getYear());
+        }
+        if (carDto.getModel() == null) {
+            return getCarsByYear(carDto.getYear());
         } else {
             return getCarsByModel(carDto.getModel());
         }
@@ -72,6 +73,17 @@ public class CarsServiceImpl implements CarsService {
     @Override
     public boolean removeCar(Integer id) {
         return carDtoDB.removeIf(carDto -> carDto.getId().equals(id));
+    }
+
+    @Override
+    public List<CarDto> mapCarToCarDto(List<Car> carList) {
+        return carList.stream().map(car -> new CarDto(car.getModel(), car.getYear())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Car> mapCarDtoToCar(List<CarDto> carDtoList) {
+        return carDtoList.stream().map(carDto -> new Car(carDto.getModel(), carDto.getYear()))
+                .collect(Collectors.toList());
     }
 
     private boolean isContainCar(Integer id) {

@@ -1,7 +1,5 @@
 package com.gleb.springintrodiction.data;
 
-import com.sun.xml.bind.v2.TODO;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -24,11 +22,12 @@ public class Owner {
             inverseJoinColumns = @JoinColumn(name = "car_id"))
     private List<Car> cars;
 
-    public Owner(Long id, String firstName, String lastName) {
-        this.id = id;
+    public Owner(String firstName, String lastName, List<Car> cars) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.cars = cars;
     }
+
 
     public Owner() {
     }
