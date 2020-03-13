@@ -16,7 +16,7 @@ public interface OwnerService {
     /**
      * Метод добавления владельца в БД
      *
-     * @param ownerDto ДТО машины
+     * @param ownerDto ДТО владельца
      * @return
      */
     void addOwner(OwnerDto ownerDto);
@@ -34,7 +34,7 @@ public interface OwnerService {
      * *Метод изменения имени и/или фамилии машины
      *
      * @param id       Id искомого владельца
-     * @param ownerDto Объект владельца машины от клиента, данные которой будем подставлять
+     * @param ownerDto Объект владельца машины от пользователя, данные которой будем подставлять
      * @return true, если данный владелец есть в БД и обновление прошло успешно, false в противном случае
      */
     boolean updateOwner(Long id, OwnerDto ownerDto);
@@ -42,7 +42,7 @@ public interface OwnerService {
     /**
      * Метод удаления владельца машины из БД
      *
-     * @param id Id искомой машины машины
+     * @param id Id искомога владельца
      * @return true, если удаление прошло удчано, false в противном случае
      */
     boolean removeOwner(Long id);
@@ -51,16 +51,8 @@ public interface OwnerService {
      * Метод маппинга списка владельцев в список без закрытой информации(например id)
      *
      * @param ownerList Список владельцев
-     * @return Список для передачи клиенту
+     * @return Список для передачи пользователю
      */
     List<OwnerDto> mapOwnerToOwnerDto(List<Owner> ownerList);
 
-    /**
-     * Метод маппинга списка владельцев от клиента в список для базы данных
-     *
-     * @param ownerList Список владельцев
-     * @return Список для передачи в базу
-     */
-
-    List<Owner> mapOwnerDtoToOwner(List<OwnerDto> ownerList);
 }

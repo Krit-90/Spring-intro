@@ -14,7 +14,7 @@ public interface OwnerRepository extends JpaRepository<Owner, Long> {
     @Query(value = "SELECT * FROM Owners o WHERE o.id = id", nativeQuery = true)
     Owner findOwnersById(Long id);
 
-    @Modifying
-    @Query(value = "UPDATE Owners own SET own.first_name = ? own.last_name = ? WHERE own.id=?", nativeQuery = true)
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE Owners  SET first_name = ?, last_name = ? WHERE id=?", nativeQuery = true)
     void update(String firstName, String lastName, Long id);
 }

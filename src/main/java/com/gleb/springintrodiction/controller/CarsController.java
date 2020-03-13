@@ -50,16 +50,12 @@ public class CarsController {
 
     @PostMapping("/cars")
     public ResponseEntity addCar(@RequestBody CarDto carDto) {
-        boolean isSucceed = carsService.addCar(carDto);
-        if (isSucceed) {
+        carsService.addCar(carDto);
             return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @PutMapping("/cars")
-    public ResponseEntity updateCarYear(@RequestParam(name = "id") Integer id,
+    public ResponseEntity updateCarYear(@RequestParam(name = "id") Long id,
                                         @RequestBody CarDto carDto) {
         boolean isSucceed = carsService.updateCar(id, carDto);
         if (isSucceed) {
@@ -69,9 +65,29 @@ public class CarsController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
     }
+    @PutMapping("/cars/owner/")
+    ResponseEntity addOwner(@RequestParam(name = "ownerId") Long ownerId, @RequestParam(name = "carId") Long carId){
+        boolean isExistOwner = carsService.addOwnerToCarById(ownerId, carId);
+        if(isExistOwner){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+    @PutMapping("/cars/motor-show/")
+    ResponseEntity addMotorShow(@RequestParam(name = "ownerId") Long motorShowId,
+                                @RequestParam(name = "carId") Long carId){
+        boolean isExistMotorShow = carsService.addMotorShowToCarById(motorShowId, carId);
+        if(isExistMotorShow){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
 
     @DeleteMapping("/cars")
-    public ResponseEntity removeCar(@RequestParam(name = "id") Integer id) {
+    public ResponseEntity removeCar(@RequestParam(name = "id") Long id) {
         boolean isSucceed = carsService.removeCar(id);
         if (isSucceed) {
             return ResponseEntity.ok().build();

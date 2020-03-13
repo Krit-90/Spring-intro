@@ -16,6 +16,15 @@ public class Car {
     private Integer year;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "cars")
     private List<Owner> owners;
+    @ManyToOne
+    @JoinColumn(name = "motorShow_id")
+    MotorShow motorShow;
+
+    public Car(String model, Integer year, MotorShow motorShow) {
+        this.model = model;
+        this.year = year;
+        this.motorShow = motorShow;
+    }
 
     public Car(String model, Integer year) {
         this.model = model;
@@ -51,6 +60,14 @@ public class Car {
 
     public void setOwners(List<Owner> owners) {
         this.owners = owners;
+    }
+
+    public MotorShow getMotorShow() {
+        return motorShow;
+    }
+
+    public void setMotorShow(MotorShow motorShow) {
+        this.motorShow = motorShow;
     }
 }
 

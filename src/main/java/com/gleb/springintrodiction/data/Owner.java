@@ -28,6 +28,10 @@ public class Owner {
         this.cars = cars;
     }
 
+    public Owner(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public Owner() {
     }

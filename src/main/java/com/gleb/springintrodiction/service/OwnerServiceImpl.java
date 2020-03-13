@@ -5,6 +5,7 @@ import com.gleb.springintrodiction.dto.OwnerDto;
 import com.gleb.springintrodiction.repository.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +27,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public void addOwner(OwnerDto ownerDto) {
-        ownerRepository.save(new Owner(ownerDto.getFirstName(), ownerDto.getLastName(), carsService
-                .mapCarDtoToCar(ownerDto.getCarsDto())));
+        ownerRepository.save(new Owner(ownerDto.getFirstName(), ownerDto.getLastName()));
     }
 
     @Override
@@ -35,6 +35,7 @@ public class OwnerServiceImpl implements OwnerService {
         return mapOwnerToOwnerDto(ownerRepository.findOwnersByFirstNameAndLastName(firstName, lastName));
     }
 
+    @Transactional
     @Override
     public boolean updateOwner(Long id, OwnerDto ownerDto) {
         boolean isExist = ownerRepository.existsById(id);
@@ -58,13 +59,5 @@ public class OwnerServiceImpl implements OwnerService {
         return ownerList.stream().map(owner -> new OwnerDto(owner.getFirstName(), owner.getLastName(),
                 carsService.mapCarToCarDto(owner.getCars()))).collect(Collectors.toList());
     }
-
-    @Override
-    public List<Owner> mapOwnerDtoToOwner(List<OwnerDto> ownerDtoList) {
-        return ownerDtoList.stream().map(ownerDto -> new Owner(ownerDto.getFirstName(), ownerDto.getLastName(),
-                carsService.mapCarDtoToCar(ownerDto.getCarsDto())))
-                .collect(Collectors.toList());
-    }
-
 
 }

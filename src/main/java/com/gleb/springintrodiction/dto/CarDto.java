@@ -7,11 +7,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class CarDto {
 
 
-    // TODO: Вот это что-то совсем монструозное
-    private static Integer counter = 0;
-    private final Integer id = counter++;
     private String model;
     private Integer year;
+    private MotorShowDto motorShow;
+
+    public CarDto(String model, Integer year, MotorShowDto motorShow) {
+        this.model = model;
+        this.year = year;
+        this.motorShow = motorShow;
+    }
 
     public CarDto(String model, Integer year) {
         this.model = model;
@@ -37,8 +41,11 @@ public class CarDto {
         this.year = year;
     }
 
-    public Integer getId() {
-        return id;
+    public MotorShowDto getMotorShow() {
+        return motorShow;
     }
 
+    public void setMotorShow(MotorShowDto motorShow) {
+        this.motorShow = motorShow;
+    }
 }

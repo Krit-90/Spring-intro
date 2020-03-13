@@ -17,16 +17,32 @@ public interface CarsService {
      * Метод добавления машины в БД
      *
      * @param carDto ДТО машины
-     * @return true, если добавлено удачно, false в противном случае
+     * @return
      */
-    boolean addCar(CarDto carDto);
+    void addCar(CarDto carDto);
 
+    /**
+     * Метод добавления автосалона для конкретной машины
+     * @param motorShowId Id автосалона
+     * @param id Id машины
+     * @return  true, если такой автосалон существует, false в противном случае
+     */
+    boolean addMotorShowToCarById(Long motorShowId, Long id);
+
+    /**
+     * Метод добавления владельца для конкретной машины
+     * @param ownerId Id автосалона
+     * @param id Id машины
+     * @return  true, если такой автосалон существует, false в противном случае
+     */
+    boolean addOwnerToCarById(Long ownerId, Long id);
     /**
      * Метод получения списка машин соответствующего года выпуска
      *
      * @param year Год выпуска машины
      * @return Отфильтрованный список машин
      */
+
     List<CarDto> getCarsByYear(Integer year);
 
     /**
@@ -52,7 +68,7 @@ public interface CarsService {
      * @param c  Объект машины от клиента, данные которой будем подставлять
      * @return true, если данная модель есть в БД и обновление прошло успешно, false в противном случае
      */
-    boolean updateCar(Integer id, CarDto c);
+    boolean updateCar(Long id, CarDto c);
 
     /**
      * Метод удаления машины из БД
@@ -60,7 +76,7 @@ public interface CarsService {
      * @param id Id искомой машины машины
      * @return true, если удаление прошло удчано, false в противном случае
      */
-    boolean removeCar(Integer id);
+    boolean removeCar(Long id);
 
     /**
      * Метод маппинга списка машин в список без закрытой информации(например id)
@@ -69,10 +85,4 @@ public interface CarsService {
      */
     List<CarDto> mapCarToCarDto(List<Car> carList);
 
-    /**
-     * Метод маппинга списка машин от клиента в список для базы данных
-     * @param carList Список машин владельца
-     * @return Список для передачи в базу
-     */
-    List<Car> mapCarDtoToCar(List<CarDto> carList);
 }

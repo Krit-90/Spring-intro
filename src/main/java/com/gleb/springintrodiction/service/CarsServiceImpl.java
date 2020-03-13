@@ -2,63 +2,78 @@ package com.gleb.springintrodiction.service;
 
 import com.gleb.springintrodiction.data.Car;
 import com.gleb.springintrodiction.dto.CarDto;
-import com.gleb.springintrodiction.dto.ContentXml;
+import com.gleb.springintrodiction.dto.MotorShowDto;
+import com.gleb.springintrodiction.repository.CarRepository;
+import com.gleb.springintrodiction.repository.MotorShowRepository;
+import com.gleb.springintrodiction.repository.OwnerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CarsServiceImpl implements CarsService {
-    private List<CarDto> carDtoDB;
 
-    public CarsServiceImpl() {
-        ContentXml carsListDto = new ContentXml();
-        carDtoDB = carsListDto.getList();
-    }
+    @Autowired
+    CarRepository carRepository;
+    @Autowired
+    MotorShowRepository motorShowRepository;
+    @Autowired
+    OwnerRepository ownerRepository;
+
 
     public List<CarDto> getCarsDtoDB() {
-        return carDtoDB;
+        return mapCarToCarDto(carRepository.findAll());
     }
 
     @Override
-    public boolean addCar(CarDto carDto) {
-        return carDtoDB.add(carDto);
+    public void addCar(CarDto carDto) {
+        carRepository.save(new Car(carDto.getModel(), carDto.getYear()));
+    }
+
+    public boolean addMotorShowToCarById(Long motorShowId, Long id) {
+        boolean isExistMotorShow = motorShowRepository.findById(motorShowId).isPresent();
+        carRepository.updateMotorShowId(motorShowId, id);
+        return isExistMotorShow;
+    }
+
+    public boolean addOwnerToCarById(Long ownerId, Long id) {
+        boolean isExistOwner = ownerRepository.findById(ownerId).isPresent();
+        carRepository.updateOwnerId(ownerId, id);
+        return isExistOwner;
     }
 
     @Override
     public List<CarDto> getCarsByYear(Integer year) {
-        return carDtoDB.stream().filter(carDto -> carDto.getYear().equals(year))
-                .collect(Collectors.toList());
+        return mapCarToCarDto(carRepository.findCarsByYear(year));
     }
 
     @Override
     public List<CarDto> getCarsByModel(String model) {
-        return carDtoDB.stream().filter(carDto -> carDto.getModel().equals(model))
-                .collect(Collectors.toList());
+        return mapCarToCarDto(carRepository.findCarsByModel(model));
     }
 
     @Override
     public List<CarDto> getCarsByModelAndYear(CarDto carDto) {
         List<CarDto> filteredList = new ArrayList<>();
         if (carDto.getYear() != null & carDto.getModel() != null) {
-            return carDtoDB.stream().filter(c -> carDto.getModel().equals(carDto.getModel()) &&
-                    carDto.getYear().equals(carDto.getYear()))
-                    .collect(Collectors.toList());
+            return mapCarToCarDto(carRepository.findCarsByModelAndYear(carDto.getModel(), carDto.getYear()));
         }
         if (carDto.getModel() == null) {
-            return getCarsByYear(carDto.getYear());
+            return mapCarToCarDto(carRepository.findCarsByYear(carDto.getYear()));
         } else {
-            return getCarsByModel(carDto.getModel());
+            return mapCarToCarDto(carRepository.findCarsByModel(carDto.getModel()));
         }
     }
 
     @Override
-    public boolean updateCar(Integer id, CarDto c) {
-        if (isContainCar(id)) {
+    public boolean updateCar(Long id, CarDto c) {
+        if (carRepository.existsById(id)) {
             // TODO: Если возвращается Optional, это значит, что нельзя просто взять и сделать .get()
             //  Разве проверка в предыдущей строчке не поможет? если обекта с таким id нет, то код и не выполнится
-            CarDto searchingCarDto = carDtoDB.stream().filter(carDto -> carDto.getId().equals(id)).findFirst().get();
+            Car searchingCarDto = carRepository.findById(id).get();
             if (c.getModel() != null) {
                 searchingCarDto.setModel(c.getModel());
             }
@@ -71,22 +86,18 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public boolean removeCar(Integer id) {
-        return carDtoDB.removeIf(carDto -> carDto.getId().equals(id));
+    public boolean removeCar(Long id) {
+        if(carRepository.existsById(id)){
+            carRepository.deleteById(id);
+        }
+        return false;
     }
 
     @Override
     public List<CarDto> mapCarToCarDto(List<Car> carList) {
-        return carList.stream().map(car -> new CarDto(car.getModel(), car.getYear())).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Car> mapCarDtoToCar(List<CarDto> carDtoList) {
-        return carDtoList.stream().map(carDto -> new Car(carDto.getModel(), carDto.getYear()))
+        return carList.stream().map(car -> new CarDto(car.getModel(), car.getYear(),
+                new MotorShowDto(car.getMotorShow().getTitle(), car.getMotorShow().getCity())))
                 .collect(Collectors.toList());
     }
 
-    private boolean isContainCar(Integer id) {
-        return carDtoDB.stream().anyMatch(carDto -> carDto.getId().equals(id));
-    }
 }
