@@ -13,8 +13,7 @@ public class Owner {
     private String firstName;
     @Column
     private String lastName;
-    // TODO: Третью таблицу с id - ми делает, а сждойнить, к примеру, к спсику машин имя и фамилию владельца не получается
-    //  Может только в ManyToOne можно так?
+    // TODO: В данном случае и не должно быть manyToMany, скорее OneToMany. У одной машины - один владелец, у одного владельца может быть много машин
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "owners_cars",
