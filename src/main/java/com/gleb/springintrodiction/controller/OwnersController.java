@@ -24,6 +24,7 @@ public class OwnersController {
     public ResponseEntity getOwnersByFirstNameAndLastName(HttpServletRequest request, @RequestBody OwnerDto ownerDto) {
         String accept = request.getHeader(HttpHeaders.ACCEPT);
         ContentXml content = new ContentXml();
+        // TODO: Аналогично, никаких if-else
         if (ownerDto.getFirstName() == null & ownerDto.getLastName() == null) {
             content.setList(ownerService.getOwnerDtoDB());
         } else {

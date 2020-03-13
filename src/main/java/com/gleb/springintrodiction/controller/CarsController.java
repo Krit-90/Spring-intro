@@ -21,11 +21,12 @@ public class CarsController {
     private CarsService carsService;
 
 
-    // TODO Не может при запросе найти требуемое тело запроса Required request body is missing
     @GetMapping("/cars")
+    // TODO: В get-запросах не бывает тела. CarDto туда должна приходить в виде набора параметров
     public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestBody CarDto carDto) {
         String accept = request.getHeader(HttpHeaders.ACCEPT);
         ContentXml content = new ContentXml();
+        // TODO: Здесь не должно быть этих if-конструкций. В сервисе должен быть один метод принимающий CarDto, в нем ты уже смотришь какие поля null внутри этого объекта, а какие нет
         if (carDto.getYear() == null & carDto.getModel() == null) {
             content.setList(carsService.getCarsDtoDB());
         } else {
