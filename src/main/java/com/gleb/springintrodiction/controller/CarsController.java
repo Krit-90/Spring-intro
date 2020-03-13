@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -23,17 +24,13 @@ public class CarsController {
 
     @GetMapping("/cars")
     // TODO: В get-запросах не бывает тела. CarDto туда должна приходить в виде набора параметров
+    //   Ты же мне сам писал
+    //   TODO: Здесь хорошо бы добавить фильтрацию по ряду признаков, а не только по годам.
+    //    Пускай на вход приходит такая же DTO и по всем не null полям делай фильтрацию - OK?
     public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestBody CarDto carDto) {
         String accept = request.getHeader(HttpHeaders.ACCEPT);
         ContentXml content = new ContentXml();
-        // TODO: Здесь не должно быть этих if-конструкций. В сервисе должен быть один метод принимающий CarDto, в нем ты уже смотришь какие поля null внутри этого объекта, а какие нет
-        if (carDto.getYear() == null & carDto.getModel() == null) {
-            content.setList(carsService.getCarsDtoDB());
-        } else {
-            if (carDto.getYear() != null & carDto.getModel() != null) {
-                content.setList(carsService.getCarsByModelAndYear(carDto));
-            }
-        }
+        content.setList(carsService.getCarsByModelAndYear(carDto));
         if (accept.equals("application/xml")) {
             StringWriter stringWriter = new StringWriter();
             try {
@@ -52,7 +49,7 @@ public class CarsController {
     @PostMapping("/cars")
     public ResponseEntity addCar(@RequestBody CarDto carDto) {
         carsService.addCar(carDto);
-            return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/cars")
@@ -66,10 +63,11 @@ public class CarsController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
     }
+
     @PutMapping("/cars/owner/")
-    ResponseEntity addOwner(@RequestParam(name = "ownerId") Long ownerId, @RequestParam(name = "carId") Long carId){
+    ResponseEntity addOwner(@RequestParam(name = "ownerId") Long ownerId, @RequestParam(name = "carId") Long carId) {
         boolean isExistOwner = carsService.addOwnerToCarById(ownerId, carId);
-        if(isExistOwner){
+        if (isExistOwner) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -78,9 +76,9 @@ public class CarsController {
 
     @PutMapping("/cars/motor-show/")
     ResponseEntity addMotorShow(@RequestParam(name = "ownerId") Long motorShowId,
-                                @RequestParam(name = "carId") Long carId){
+                                @RequestParam(name = "carId") Long carId) {
         boolean isExistMotorShow = carsService.addMotorShowToCarById(motorShowId, carId);
-        if(isExistMotorShow){
+        if (isExistMotorShow) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

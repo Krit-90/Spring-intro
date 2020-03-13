@@ -57,7 +57,9 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public List<CarDto> getCarsByModelAndYear(CarDto carDto) {
-        List<CarDto> filteredList = new ArrayList<>();
+        if(carDto.getYear() == null & carDto.getModel() == null){
+            return getCarsDtoDB();
+        }
         if (carDto.getYear() != null & carDto.getModel() != null) {
             return mapCarToCarDto(carRepository.findCarsByModelAndYear(carDto.getModel(), carDto.getYear()));
         }

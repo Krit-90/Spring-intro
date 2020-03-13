@@ -14,6 +14,7 @@ public class Owner {
     @Column
     private String lastName;
     // TODO: В данном случае и не должно быть manyToMany, скорее OneToMany. У одной машины - один владелец, у одного владельца может быть много машин
+    //  Я хотел сделать как в жизни, когда пишут доверенность на нескольких лиц
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "owners_cars",
