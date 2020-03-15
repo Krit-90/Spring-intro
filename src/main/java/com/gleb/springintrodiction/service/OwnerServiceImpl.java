@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 @Service
 public class OwnerServiceImpl implements OwnerService {
 
+    // TODO: Аналогично
+
     @Autowired
     OwnerRepository ownerRepository;
     @Autowired
