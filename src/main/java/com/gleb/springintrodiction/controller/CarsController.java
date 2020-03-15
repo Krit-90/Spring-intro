@@ -23,18 +23,16 @@ public class CarsController {
 
 
     @GetMapping("/cars")
-    // TODO: В get-запросах не бывает тела. CarDto туда должна приходить в виде набора параметров
-    //   Ты же мне сам писал
-    //   TODO: Здесь хорошо бы добавить фильтрацию по ряду признаков, а не только по годам.
-    //    Пускай на вход приходит такая же DTO и по всем не null полям делай фильтрацию - OK?
-    public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestBody CarDto carDto) {
+    public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestParam(required = false) String model,
+                                                @RequestParam(required = false) Integer year) {
+
         String accept = request.getHeader(HttpHeaders.ACCEPT);
-        ContentXml content = new ContentXml();
-        content.setList(carsService.getCarsByModelAndYear(carDto));
         if (accept.equals("application/xml")) {
+            ContentXml content = new ContentXml();
+            content.setContent(carsService.getCarsByModelAndYear(model, year));
             StringWriter stringWriter = new StringWriter();
             try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(ContentXml.class);
+                JAXBContext jaxbContext = JAXBContext.newInstance(ContentXml.class, CarDto.class);
                 Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
                 jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 jaxbMarshaller.marshal(content, stringWriter);
@@ -43,7 +41,7 @@ public class CarsController {
             }
             return ResponseEntity.ok(stringWriter.toString());
         }
-        return ResponseEntity.ok(content);
+        return ResponseEntity.ok(carsService.getCarsByModelAndYear(model, year));
     }
 
     @PostMapping("/cars")

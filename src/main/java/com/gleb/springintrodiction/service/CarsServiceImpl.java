@@ -8,22 +8,19 @@ import com.gleb.springintrodiction.repository.MotorShowRepository;
 import com.gleb.springintrodiction.repository.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CarsServiceImpl implements CarsService {
 
-    // TODO: Модификаторы доступа
 
     @Autowired
-    CarRepository carRepository;
+    private CarRepository carRepository;
     @Autowired
-    MotorShowRepository motorShowRepository;
+    private MotorShowRepository motorShowRepository;
     @Autowired
-    OwnerRepository ownerRepository;
+    private OwnerRepository ownerRepository;
 
 
     public List<CarDto> getCarsDtoDB() {
@@ -58,17 +55,17 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public List<CarDto> getCarsByModelAndYear(CarDto carDto) {
-        if(carDto.getYear() == null & carDto.getModel() == null){
+    public List<CarDto> getCarsByModelAndYear(String model, Integer year) {
+        if(year == null & model == null){
             return getCarsDtoDB();
         }
-        if (carDto.getYear() != null & carDto.getModel() != null) {
-            return mapCarToCarDto(carRepository.findCarsByModelAndYear(carDto.getModel(), carDto.getYear()));
+        if (year != null & model != null) {
+            return mapCarToCarDto(carRepository.findCarsByModelAndYear(model, year));
         }
-        if (carDto.getModel() == null) {
-            return mapCarToCarDto(carRepository.findCarsByYear(carDto.getYear()));
+        if (model == null) {
+            return mapCarToCarDto(carRepository.findCarsByYear(year));
         } else {
-            return mapCarToCarDto(carRepository.findCarsByModel(carDto.getModel()));
+            return mapCarToCarDto(carRepository.findCarsByModel(model));
         }
     }
 

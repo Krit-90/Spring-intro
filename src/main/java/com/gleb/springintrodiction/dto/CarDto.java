@@ -1,9 +1,8 @@
 package com.gleb.springintrodiction.dto;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType
 public class CarDto {
 
 

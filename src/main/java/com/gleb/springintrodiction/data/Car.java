@@ -16,10 +16,9 @@ public class Car {
     private Integer year;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "cars")
     private List<Owner> owners;
-    // TODO: Модификатор доступа
     @ManyToOne
     @JoinColumn(name = "motorShow_id")
-    MotorShow motorShow;
+    private MotorShow motorShow;
 
     public Car(String model, Integer year, MotorShow motorShow) {
         this.model = model;

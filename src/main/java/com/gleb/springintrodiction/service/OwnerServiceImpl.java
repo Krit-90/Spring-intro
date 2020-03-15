@@ -12,12 +12,11 @@ import java.util.stream.Collectors;
 @Service
 public class OwnerServiceImpl implements OwnerService {
 
-    // TODO: Аналогично
 
     @Autowired
-    OwnerRepository ownerRepository;
+    private OwnerRepository ownerRepository;
     @Autowired
-    CarsService carsService;
+    private CarsService carsService;
 
     @Override
     public List<OwnerDto> getOwnerDtoDB() {
@@ -34,6 +33,9 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public List<OwnerDto> getOwnerByFirstNameAndLastName(String firstName, String lastName) {
+        if(firstName == null & lastName == null){
+            return getOwnerDtoDB();
+        }
         return mapOwnerToOwnerDto(ownerRepository.findOwnersByFirstNameAndLastName(firstName, lastName));
     }
 

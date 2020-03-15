@@ -4,24 +4,25 @@ import com.gleb.springintrodiction.data.MotorShow;
 import com.gleb.springintrodiction.dto.MotorShowDto;
 import com.gleb.springintrodiction.repository.MotorShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class MotorShowServiceImpl implements MotorShowService {
 
-    // TODO: Аналогично
 
     @Autowired
-    MotorShowRepository motorShowRepository;
+    private MotorShowRepository motorShowRepository;
     @Autowired
-    CarsService carsService;
+    private CarsService carsService;
 
     @Override
     public List<MotorShowDto> getMotorShowDtoDB() {
         return motorShowRepository.findAll().stream()
                 .map(motorShow -> new MotorShowDto(motorShow.getTitle(), motorShow.getCity(),
-                        carsService.mapCarToCarDto(motorShow.getCars())))
+                 carsService.mapCarToCarDto(motorShow.getCars())))
                 .collect(Collectors.toList());
     }
 
@@ -32,6 +33,9 @@ public class MotorShowServiceImpl implements MotorShowService {
 
     @Override
     public List<MotorShowDto> getMotorShowByTitleAndCity(String title, String city) {
+        if(title == null & city == null){
+            return getMotorShowDtoDB();
+        }
         return mapMotorShowToMotorShowDto(motorShowRepository.findByTitleAndCity(title, city));
     }
 

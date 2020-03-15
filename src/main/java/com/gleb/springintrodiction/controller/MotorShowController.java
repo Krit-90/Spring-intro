@@ -2,12 +2,13 @@ package com.gleb.springintrodiction.controller;
 
 import com.gleb.springintrodiction.dto.ContentXml;
 import com.gleb.springintrodiction.dto.ErrorDto;
-import com.gleb.springintrodiction.dto.OwnerDto;
-import com.gleb.springintrodiction.service.OwnerService;
+import com.gleb.springintrodiction.dto.MotorShowDto;
+import com.gleb.springintrodiction.service.MotorShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,21 +18,21 @@ import javax.xml.bind.Marshaller;
 import java.io.StringWriter;
 
 @RestController
-public class OwnersController {
+public class MotorShowController {
     @Autowired
-    private OwnerService ownerService;
+    private MotorShowService motorShowService;
 
-    @GetMapping("/owners")
+    @GetMapping("/motor-show")
     public ResponseEntity getOwnersByFirstNameAndLastName(HttpServletRequest request,
-                                                          @RequestParam(required = false) String firstName,
-                                                          @RequestParam(required = false) String lastName) {
+                                                          @RequestParam(required = false) String title,
+                                                          @RequestParam(required = false) String city) {
         String accept = request.getHeader(HttpHeaders.ACCEPT);
         if (accept.equals("application/xml")) {
             ContentXml content = new ContentXml();
-            content.setContent(ownerService.getOwnerByFirstNameAndLastName(firstName, lastName));
+            content.setContent(motorShowService.getMotorShowByTitleAndCity(title, city));
             StringWriter stringWriter = new StringWriter();
             try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(ContentXml.class, OwnerDto.class);
+                JAXBContext jaxbContext = JAXBContext.newInstance(ContentXml.class, MotorShowDto.class);
                 Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
                 jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                 jaxbMarshaller.marshal(content, stringWriter);
@@ -40,20 +41,20 @@ public class OwnersController {
             }
             return ResponseEntity.ok(stringWriter.toString());
         }
-        return ResponseEntity.ok(ownerService.getOwnerByFirstNameAndLastName(firstName, lastName));
+        return ResponseEntity.ok(motorShowService.getMotorShowByTitleAndCity(title, city));
     }
 
-    @PostMapping("/owners")
-    public ResponseEntity addOwner(@RequestBody OwnerDto ownerDto) {
-        ownerService.addOwner(ownerDto);
+    @PostMapping("/motor-show")
+    public ResponseEntity addMotorShow(@RequestBody MotorShowDto motorShowDto) {
+        motorShowService.addMotorShow(motorShowDto);
         return ResponseEntity.ok().build();
     }
 
 
-    @PutMapping("/owners")
-    public ResponseEntity updateOwner(@RequestParam(name = "id") Long id,
-                                      @RequestBody OwnerDto ownerDto) {
-        boolean isSucceed = ownerService.updateOwner(id, ownerDto);
+    @PutMapping("/motor-show")
+    public ResponseEntity updateMotorShow(@RequestParam(name = "id") Long id,
+                                          @RequestBody MotorShowDto motorShowDto) {
+        boolean isSucceed = motorShowService.updateMotorShow(id, motorShowDto);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         }
@@ -62,9 +63,9 @@ public class OwnersController {
                 .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @DeleteMapping("/owners")
-    public ResponseEntity removeOwner(@RequestParam(name = "id") Long id) {
-        boolean isSucceed = ownerService.removeOwner(id);
+    @DeleteMapping("/motor-show")
+    public ResponseEntity removeMotorShow(@RequestParam(name = "id") Long id) {
+        boolean isSucceed = motorShowService.removeMotorShow(id);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         } else {

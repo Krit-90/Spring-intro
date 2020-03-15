@@ -56,10 +56,11 @@ public interface CarsService {
     /**
      * Метод получения списка машин соответствующей модели и года
      *
-     * @param carDto Dto машины у котрой берем искомые данные
+     * @param model Модель искомой машины
+     * @param year Год искомой машины
      * @return Отфильтрованный список машин
      */
-    List<CarDto> getCarsByModelAndYear(CarDto carDto);
+    List<CarDto> getCarsByModelAndYear(String model, Integer year);
 
     /**
      * *Метод изменения года выпуска и/или модели машины
