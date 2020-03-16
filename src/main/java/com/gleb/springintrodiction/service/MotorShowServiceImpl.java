@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Service
 public class MotorShowServiceImpl implements MotorShowService {
 
-
     @Autowired
     private MotorShowRepository motorShowRepository;
     @Autowired

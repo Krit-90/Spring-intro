@@ -1,6 +1,11 @@
 package com.gleb.springintrodiction.data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Table(name = "motorShow")
@@ -10,10 +15,10 @@ public class MotorShow {
     @GeneratedValue
     private Long id;
     @Column
-    private  String title;
+    private String title;
     @Column
-    private  String city;
-    @OneToMany(mappedBy = "motorShow",orphanRemoval = true)
+    private String city;
+    @OneToMany(mappedBy = "motorShow", orphanRemoval = true)
     private List<Car> cars;
 
     public MotorShow(String title, String city, List<Car> cars) {

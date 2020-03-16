@@ -4,11 +4,14 @@ import com.gleb.springintrodiction.dto.CarDto;
 import com.gleb.springintrodiction.dto.ContentXml;
 import com.gleb.springintrodiction.dto.ErrorDto;
 import com.gleb.springintrodiction.service.CarsService;
+import com.gleb.springintrodiction.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
@@ -21,12 +24,9 @@ public class CarsController {
     @Autowired
     private CarsService carsService;
 
-
     @GetMapping("/cars")
-    public ResponseEntity getCarsByYearAndModel(HttpServletRequest request, @RequestParam(required = false) String model,
-                                                @RequestParam(required = false) Integer year) {
-
-        String accept = request.getHeader(HttpHeaders.ACCEPT);
+    public ResponseEntity getCarsByYearAndModel(@RequestParam CarDto carDto) {
+        String accept = HttpUtils.getHttpHeader(HttpHeaders.ACCEPT);
         if (accept.equals("application/xml")) {
             ContentXml content = new ContentXml();
             content.setContent(carsService.getCarsByModelAndYear(model, year));

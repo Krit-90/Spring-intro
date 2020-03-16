@@ -14,14 +14,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SimpleConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserDetailsService myUserDetailsService;
+    private UserDetailsService myUserDetailsService;
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.userDetailsService(myUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-
-
     }
+
 // TODO: Вход по ролям не ограниечен, хотя с базы User подтягивается и назначаются SimpleGrantedAuthority
     @Override
     protected void configure(HttpSecurity http) throws Exception {

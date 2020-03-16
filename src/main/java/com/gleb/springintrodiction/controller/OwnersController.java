@@ -4,6 +4,7 @@ import com.gleb.springintrodiction.dto.ContentXml;
 import com.gleb.springintrodiction.dto.ErrorDto;
 import com.gleb.springintrodiction.dto.OwnerDto;
 import com.gleb.springintrodiction.service.OwnerService;
+import com.gleb.springintrodiction.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,6 @@ public class OwnersController {
     public ResponseEntity getOwnersByFirstNameAndLastName(HttpServletRequest request,
                                                           @RequestParam(required = false) String firstName,
                                                           @RequestParam(required = false) String lastName) {
-        String accept = request.getHeader(HttpHeaders.ACCEPT);
         if (accept.equals("application/xml")) {
             ContentXml content = new ContentXml();
             content.setContent(ownerService.getOwnerByFirstNameAndLastName(firstName, lastName));

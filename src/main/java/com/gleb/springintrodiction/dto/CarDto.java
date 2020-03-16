@@ -5,10 +5,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType
 public class CarDto {
 
-
     private String model;
     private Integer year;
-    private MotorShowDto motorShow;
+    private String motorShowTitle;
 
     public CarDto(String model, Integer year, MotorShowDto motorShow) {
         this.model = model;
@@ -40,11 +39,11 @@ public class CarDto {
         this.year = year;
     }
 
-    public MotorShowDto getMotorShow() {
-        return motorShow;
+    public String getMotorShowTitle() {
+        return motorShowTitle;
     }
 
-    public void setMotorShow(MotorShowDto motorShow) {
-        this.motorShow = motorShow;
+    public void setMotorShowTitle(String motorShowTitle) {
+        this.motorShowTitle = motorShowTitle;
     }
 }

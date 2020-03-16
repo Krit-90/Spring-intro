@@ -1,12 +1,14 @@
 package com.gleb.springintrodiction.service;
 
 import com.gleb.springintrodiction.data.Car;
+import com.gleb.springintrodiction.data.MotorShow;
 import com.gleb.springintrodiction.dto.CarDto;
 import com.gleb.springintrodiction.dto.MotorShowDto;
 import com.gleb.springintrodiction.repository.CarRepository;
 import com.gleb.springintrodiction.repository.MotorShowRepository;
 import com.gleb.springintrodiction.repository.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,18 +57,11 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public List<CarDto> getCarsByModelAndYear(String model, Integer year) {
-        if(year == null & model == null){
-            return getCarsDtoDB();
-        }
-        if (year != null & model != null) {
-            return mapCarToCarDto(carRepository.findCarsByModelAndYear(model, year));
-        }
-        if (model == null) {
-            return mapCarToCarDto(carRepository.findCarsByYear(year));
-        } else {
-            return mapCarToCarDto(carRepository.findCarsByModel(model));
-        }
+    public List<CarDto> getCarsByModelAndYear(CarDto carDto) {
+        MotorShow motorShow = motorShowRepository.findByTitle(carDto.getMotorShowTitle()).get(0);
+        Car car = new Car(carDto.getModel(), carDto.getYear(), motorShow);
+        List<Car> result = carRepository.findAll(Example.of(car));
+        return result.stream().map(car1 -> new CarDto(car.getModel(), car.getYear())).collect(Collectors.toList());
     }
 
     @Override

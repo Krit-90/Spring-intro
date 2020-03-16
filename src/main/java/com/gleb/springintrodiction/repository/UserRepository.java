@@ -10,7 +10,7 @@ import javax.persistence.Query;
 
 @Repository
 @Transactional
-public class UserRepository{
+public class UserRepository {
 
     @Autowired
     private EntityManager entityManager;
