@@ -1,12 +1,12 @@
 package com.gleb.springintrodiction.config;
 
-import com.gleb.springintrodiction.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SimpleConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    MyUserDetailsService myUserDetailsService;
+    UserDetailsService myUserDetailsService;
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -31,9 +31,9 @@ public class SimpleConfiguration extends WebSecurityConfigurerAdapter {
                         "/cars/**"
                 ).permitAll()
                 .antMatchers("owners/**")
-                .access("hasRole('ROLE_ADMIN')")
+                .hasRole("ADMIN")
                 .antMatchers("motor-show/**")
-                .access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+                .hasAnyRole("ADMIN", "USER")
                 .anyRequest()
                 .authenticated()
                 .and()
