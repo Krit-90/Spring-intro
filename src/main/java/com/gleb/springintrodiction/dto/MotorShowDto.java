@@ -7,12 +7,12 @@ import java.util.List;
 public class MotorShowDto {
     private String title;
     private String city;
-    private List<CarDto> carsDtos;
+    private List<String> carsDtosModel;
 
-    public MotorShowDto(String title, String city, List<CarDto> carsDtos) {
+    public MotorShowDto(String title, String city, List<String> carsDtosModel) {
         this.title = title;
         this.city = city;
-        this.carsDtos = carsDtos;
+        this.carsDtosModel = carsDtosModel;
     }
 
     public MotorShowDto(String title, String city) {
@@ -39,12 +39,12 @@ public class MotorShowDto {
         this.city = city;
     }
 
-    public List<CarDto> getCarsDtos() {
-        return carsDtos;
+    public List<String> getCarsDtosModel() {
+        return carsDtosModel;
     }
 
-    public void setCarsDtos(List<CarDto> carsDtos) {
-        this.carsDtos = carsDtos;
+    public void setCarsDtosModel(List<String> carsDtosModel) {
+        this.carsDtosModel = carsDtosModel;
     }
 }
 

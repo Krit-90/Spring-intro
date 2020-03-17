@@ -23,6 +23,7 @@ public interface CarsService {
 
     /**
      * Метод добавления автосалона для конкретной машины
+     *
      * @param motorShowId Id автосалона
      * @param id Id машины
      * @return  true, если такой автосалон существует, false в противном случае
@@ -31,36 +32,20 @@ public interface CarsService {
 
     /**
      * Метод добавления владельца для конкретной машины
+     *
      * @param ownerId Id автосалона
      * @param id Id машины
      * @return  true, если такой автосалон существует, false в противном случае
      */
     boolean addOwnerToCarById(Long ownerId, Long id);
-    /**
-     * Метод получения списка машин соответствующего года выпуска
-     *
-     * @param year Год выпуска машины
-     * @return Отфильтрованный список машин
-     */
-
-    List<CarDto> getCarsByYear(Integer year);
-
-    /**
-     * Метод получения списка машин соответствующей модели
-     *
-     * @param model Модель машины
-     * @return Отфильтрованный список машин
-     */
-    List<CarDto> getCarsByModel(String model);
 
     /**
      * Метод получения списка машин соответствующей модели и года
      *
-     * @param model Модель искомой машины
-     * @param year Год искомой машины
+     * @param carDto Дто машины, из которой мы берем искомые данные
      * @return Отфильтрованный список машин
      */
-    List<CarDto> getCarsByModelAndYear(String model, Integer year);
+    List<CarDto> getCarsByModelAndYear(CarDto carDto);
 
     /**
      * *Метод изменения года выпуска и/или модели машины
@@ -81,9 +66,16 @@ public interface CarsService {
 
     /**
      * Метод маппинга списка машин в список без закрытой информации(например id)
+     *
      * @param carList Список машин
      * @return Список для передачи клиенту
      */
     List<CarDto> mapCarToCarDto(List<Car> carList);
 
+    /**
+     * Метод быборки моделей из приведенного списка машин
+     * @param carList Список машин для выборки
+     * @return Список для передачи связанных Дто
+     */
+    List<String> carsModelStringList(List<Car> carList);
 }

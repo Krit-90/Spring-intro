@@ -1,47 +1,43 @@
 package com.gleb.springintrodiction.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gleb.springintrodiction.dto.CarDto;
-import com.gleb.springintrodiction.dto.ContentXml;
 import com.gleb.springintrodiction.dto.ErrorDto;
 import com.gleb.springintrodiction.service.CarsService;
 import com.gleb.springintrodiction.util.HttpUtils;
+import com.gleb.springintrodiction.util.XmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
 
 @RestController
 public class CarsController {
     @Autowired
     private CarsService carsService;
 
+
+
+    // TODO Два варианта с получением Дто, только в первом(закомментированный)
+    //  в строке url через браузер она не обрабатывается приложением, только в postman все нормально. А второй вариант
+    //  без аннотатации. Какой лучше?
+
+    /*    @GetMapping("/cars")
+        public ResponseEntity getCarsByYearAndModel(@RequestParam(value = "carDto", required = false) String carDto)
+                throws JsonProcessingException {
+            CarDto carDto1 = new ObjectMapper().readValue(carDto, CarDto.class);*/
+
     @GetMapping("/cars")
-    public ResponseEntity getCarsByYearAndModel(@RequestParam CarDto carDto) {
+    public ResponseEntity getCarsByYearAndModel(CarDto carDto)
+            throws JsonProcessingException {
         String accept = HttpUtils.getHttpHeader(HttpHeaders.ACCEPT);
-        if (accept.equals("application/xml")) {
-            ContentXml content = new ContentXml();
-            content.setContent(carsService.getCarsByModelAndYear(model, year));
-            StringWriter stringWriter = new StringWriter();
-            try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(ContentXml.class, CarDto.class);
-                Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-                jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                jaxbMarshaller.marshal(content, stringWriter);
-            } catch (JAXBException e) {
-                e.printStackTrace();
-            }
-            return ResponseEntity.ok(stringWriter.toString());
+        if (accept.contains("application/xml")) {
+            String content = XmlUtil.convertToXml(carsService.getCarsByModelAndYear(carDto));
+            return ResponseEntity.ok(content);
         }
-        return ResponseEntity.ok(carsService.getCarsByModelAndYear(model, year));
+        return ResponseEntity.ok(carsService.getCarsByModelAndYear(carDto));
     }
 
     @PostMapping("/cars")

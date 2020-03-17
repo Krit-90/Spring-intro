@@ -15,8 +15,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query(value = "SELECT * FROM Cars c WHERE c.id = ?", nativeQuery = true)
     Car findCarsById(Long id);
-    @Query(value = "UPDATE Cars  SET motor_show_id = ? WHERE id=?", nativeQuery = true)
+    @Query(value = "UPDATE Cars SET motor_show_id = ? WHERE id=?", nativeQuery = true)
     void updateMotorShowId(Long motorShowId, Long id);
-    @Query(value = "UPDATE Cars  SET owner_id = ? WHERE id=?", nativeQuery = true)
-    void updateOwnerId(Long motorShowId, Long id);
+    @Query(value = "UPDATE Owners_Cars SET owner_id = ? WHERE car_id=?", nativeQuery = true)
+    void updateOwnerId(Long ownerId, Long id);
 }

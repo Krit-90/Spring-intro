@@ -21,7 +21,7 @@ public class OwnerServiceImpl implements OwnerService {
     public List<OwnerDto> getOwnerDtoDB() {
         return ownerRepository.findAll().stream()
                 .map(owner -> new OwnerDto(owner.getFirstName(), owner.getLastName(),
-                 carsService.mapCarToCarDto(owner.getCars())))
+                 carsService.carsModelStringList(owner.getCars())))
                 .collect(Collectors.toList());
     }
 
@@ -60,7 +60,7 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public List<OwnerDto> mapOwnerToOwnerDto(List<Owner> ownerList) {
         return ownerList.stream().map(owner -> new OwnerDto(owner.getFirstName(), owner.getLastName(),
-                carsService.mapCarToCarDto(owner.getCars()))).collect(Collectors.toList());
+                carsService.carsModelStringList(owner.getCars()))).collect(Collectors.toList());
     }
 
 }

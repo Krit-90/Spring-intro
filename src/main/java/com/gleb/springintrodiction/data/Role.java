@@ -10,10 +10,8 @@ public class Role {
     @GeneratedValue
     @Column
     private Long id;
-
     @Column
     private String roleName;
-
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 

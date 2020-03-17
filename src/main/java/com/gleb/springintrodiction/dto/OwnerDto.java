@@ -9,12 +9,12 @@ import java.util.List;
 public class OwnerDto {
     private String firstName;
     private String lastName;
-    private List<CarDto> carsDto;
+    private List<String> carsDtosModel;
 
-    public OwnerDto(String firstName, String lastName, List<CarDto> carsDto) {
+    public OwnerDto(String firstName, String lastName, List<String> carsDtosModel) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.carsDto = carsDto;
+        this.carsDtosModel = carsDtosModel;
     }
 
     public OwnerDto() {
@@ -36,11 +36,11 @@ public class OwnerDto {
         this.lastName = lastName;
     }
 
-    public List<CarDto> getCarsDto() {
-        return carsDto;
+    public List<String> getCarsDtosModel() {
+        return carsDtosModel;
     }
 
-    public void setCarsDto(List<CarDto> carsDto) {
-        this.carsDto = carsDto;
+    public void setCarsDtosModel(List<String> carsDtosModel) {
+        this.carsDtosModel = carsDtosModel;
     }
 }

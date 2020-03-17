@@ -1,18 +1,15 @@
 package com.gleb.springintrodiction.dto;
 
-import javax.xml.bind.annotation.XmlType;
-
-@XmlType
 public class CarDto {
 
     private String model;
     private Integer year;
     private String motorShowTitle;
 
-    public CarDto(String model, Integer year, MotorShowDto motorShow) {
+    public CarDto(String model, Integer year, String motorShowTitle) {
         this.model = model;
         this.year = year;
-        this.motorShow = motorShow;
+        this.motorShowTitle = motorShowTitle;
     }
 
     public CarDto(String model, Integer year) {

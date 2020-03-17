@@ -21,7 +21,7 @@ public class MotorShowServiceImpl implements MotorShowService {
     public List<MotorShowDto> getMotorShowDtoDB() {
         return motorShowRepository.findAll().stream()
                 .map(motorShow -> new MotorShowDto(motorShow.getTitle(), motorShow.getCity(),
-                 carsService.mapCarToCarDto(motorShow.getCars())))
+                 carsService.carsModelStringList(motorShow.getCars())))
                 .collect(Collectors.toList());
     }
 
@@ -59,8 +59,7 @@ public class MotorShowServiceImpl implements MotorShowService {
     @Override
     public List<MotorShowDto> mapMotorShowToMotorShowDto(List<MotorShow> motorShowList) {
         return motorShowList.stream().map(motorShow -> new MotorShowDto(motorShow.getTitle(), motorShow.getCity(),
-                carsService.mapCarToCarDto(motorShow.getCars())))
+                carsService.carsModelStringList(motorShow.getCars())))
                .collect(Collectors.toList());
     }
-
 }
