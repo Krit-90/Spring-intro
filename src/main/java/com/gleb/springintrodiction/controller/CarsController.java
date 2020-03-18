@@ -20,9 +20,7 @@ public class CarsController {
 
 
 
-    // TODO Два варианта с получением Дто, только в первом(закомментированный)
-    //  в строке url через браузер она не обрабатывается приложением, только в postman все нормально. А второй вариант
-    //  без аннотатации. Какой лучше?
+    // TODO: Не надо руками вообще ничего мапить. Посмотри как работают параметры produces и consumes в аннотациях @RequestMapping
 
     /*    @GetMapping("/cars")
         public ResponseEntity getCarsByYearAndModel(@RequestParam(value = "carDto", required = false) String carDto)

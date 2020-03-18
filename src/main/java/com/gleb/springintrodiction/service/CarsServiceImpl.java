@@ -71,8 +71,6 @@ public class CarsServiceImpl implements CarsService {
     @Override
     public boolean updateCar(Long id, CarDto c) {
         if (carRepository.existsById(id)) {
-            // TODO: Если возвращается Optional, это значит, что нельзя просто взять и сделать .get()
-            //  Разве проверка в предыдущей строчке не поможет? если объекта с таким id нет, то код и не выполнится
             Car searchingCarDto = carRepository.findById(id).get();
             if (c.getModel() != null) {
                 searchingCarDto.setModel(c.getModel());
