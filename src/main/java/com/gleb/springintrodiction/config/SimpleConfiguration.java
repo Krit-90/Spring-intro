@@ -20,7 +20,6 @@ public class SimpleConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
-// TODO: Вход по ролям не ограниечен, хотя с базы User подтягивается и назначаются SimpleGrantedAuthority
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -28,9 +27,9 @@ public class SimpleConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/cars/**"
                 ).permitAll()
-                .antMatchers("owners/**")
+                .antMatchers("/owners/**")
                 .hasRole("ADMIN")
-                .antMatchers("motor-show/**")
+                .antMatchers("/motor-show/**")
                 .hasAnyRole("ADMIN", "USER")
                 .anyRequest()
                 .authenticated()

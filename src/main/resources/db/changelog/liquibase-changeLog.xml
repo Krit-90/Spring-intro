@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
+
+    <changeSet id="GAbldulaev-1" author="GAbldulaev">
+        <createTable tableName="motor_show">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar"/>
+            <column name="city" type="varchar"/>
+        </createTable>
+        <createTable tableName="cars">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="model" type="varchar"/>
+            <column name="year" type="integer"/>
+            <column name="motor_show_id" type="BIGINT">
+                <constraints foreignKeyName="motor_show_id"
+                             referencedTableName="motor_show"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="GAdulaev-2" author="GAbdulaev">
+        <createTable tableName="owners">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar"/>
+            <column name="last_name" type="varchar"/>
+        </createTable>
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_name" type="varchar"/>
+        </createTable>
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar"/>
+            <column name="username" type="varchar"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="GAbdulaev-3" author="GAbdulaev">
+        <createTable tableName="owners_cars">
+            <column name="owner_id" type="BIGINT">
+                <constraints foreignKeyName="owner_id"
+                             referencedTableName="owners"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                />
+            </column>
+            <column name="car_id" type="BIGINT">
+                <constraints foreignKeyName="car_id"
+                             referencedTableName="cars"
+                             referencedColumnNames="id"
+                             deleteCascade="true"
+                />
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
