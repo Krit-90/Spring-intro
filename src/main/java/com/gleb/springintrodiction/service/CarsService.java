@@ -2,6 +2,7 @@ package com.gleb.springintrodiction.service;
 
 import java.util.List;
 import com.gleb.springintrodiction.data.Car;
+import com.gleb.springintrodiction.data.Owner;
 import com.gleb.springintrodiction.dto.CarDto;
 
 public interface CarsService {
@@ -77,5 +78,13 @@ public interface CarsService {
      * @param carList Список машин для выборки
      * @return Список для передачи связанных Дто
      */
+
     List<String> carsModelStringList(List<Car> carList);
+    /**
+     * Метод для теста, который возвращает список владельцев машин определенной модели и года, если год 1967,
+     * то вернуть первого владельца, если 1970, то последнего, в противном случае вернуть всех владельцев
+     * @param carDto Дто искомой машины
+     * @return Список владельцев по условию
+     */
+    List<Owner> findOwnersOfCarsByAge(CarDto carDto);
 }

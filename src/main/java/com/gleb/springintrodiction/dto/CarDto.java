@@ -43,4 +43,24 @@ public class CarDto {
     public void setMotorShowTitle(String motorShowTitle) {
         this.motorShowTitle = motorShowTitle;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CarDto)) return false;
+
+        CarDto carDto = (CarDto) o;
+
+        if (getModel() != null ? !getModel().equals(carDto.getModel()) : carDto.getModel() != null) return false;
+        if (getYear() != null ? !getYear().equals(carDto.getYear()) : carDto.getYear() != null) return false;
+        return getMotorShowTitle() != null ? getMotorShowTitle().equals(carDto.getMotorShowTitle()) : carDto.getMotorShowTitle() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getModel() != null ? getModel().hashCode() : 0;
+        result = 31 * result + (getYear() != null ? getYear().hashCode() : 0);
+        result = 31 * result + (getMotorShowTitle() != null ? getMotorShowTitle().hashCode() : 0);
+        return result;
+    }
 }

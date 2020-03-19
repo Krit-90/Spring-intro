@@ -2,15 +2,15 @@ package com.gleb.springintrodiction.service;
 
 import com.gleb.springintrodiction.data.Car;
 import com.gleb.springintrodiction.data.MotorShow;
+import com.gleb.springintrodiction.data.Owner;
 import com.gleb.springintrodiction.dto.CarDto;
-import com.gleb.springintrodiction.dto.MotorShowDto;
 import com.gleb.springintrodiction.repository.CarRepository;
 import com.gleb.springintrodiction.repository.MotorShowRepository;
 import com.gleb.springintrodiction.repository.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,13 +52,13 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public List<CarDto> getCarsByModelAndYear(CarDto carDto) {
-        if (carDto == null){
+        if (carDto == null) {
             List<Car> result = carRepository.findAll();
             return result.stream().map(car1 -> new CarDto(car1.getModel(), car1.getYear(),
                     car1.getMotorShow().getTitle())).collect(Collectors.toList());
         }
         Car car;
-        if(carDto.getMotorShowTitle() != null) {
+        if (carDto.getMotorShowTitle() != null) {
             MotorShow motorShow = motorShowRepository.findByTitle(carDto.getMotorShowTitle()).get(0);
             car = new Car(carDto.getModel(), carDto.getYear(), motorShow);
         } else {
@@ -93,13 +93,41 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public List<CarDto> mapCarToCarDto(List<Car> carList) {
-        return carList.stream().map(car -> new CarDto(car.getModel(), car.getYear(), car.getMotorShow().getTitle()))
-                .collect(Collectors.toList());
+        List<CarDto> carDtos;
+        carDtos = carList.stream().filter(car -> car.getMotorShow() == null).
+        map(car -> new CarDto(car.getModel(), car.getYear())).collect(Collectors.toList());
+        carDtos.addAll(carList.stream().filter(car -> car.getMotorShow() != null).
+                map(car -> new CarDto(car.getModel(), car.getYear(), car.getMotorShow().getTitle()))
+                .collect(Collectors.toList()));
+        return carDtos;
     }
 
-    public List<String> carsModelStringList(List<Car> carList){
-        return carList.stream().map(car -> new String(car.getModel())).collect(Collectors.toList());
+    public List<String> carsModelStringList(List<Car> carList) {
+        return carList.stream().map(Car::getModel).collect(Collectors.toList());
     }
 
-
+    public List<Owner> findOwnersOfCarsByAge(CarDto carDto) {
+        List<Owner> searchingList = new ArrayList<>();
+        if (carDto.getModel() == null & carDto.getYear() == null) {
+            searchingList.add(new Owner("unknown", "car"));
+            return searchingList;
+        } else {
+            if (carDto.getYear() == null & carDto.getModel() != null) {
+                searchingList.add(new Owner("not enough", "info"));
+                return searchingList;
+            }
+        }
+        for (Car car : carRepository.findAll()) {
+            if (car.getModel() == carDto.getModel() & car.getYear().equals(carDto.getYear())) {
+                switch (car.getYear()) {
+                    case 1967: searchingList.add(car.getOwners().get(0));
+                    break;
+                    case 1970: searchingList.add(car.getOwners().get(car.getOwners().size() - 1));
+                    break;
+                    default: searchingList.addAll(car.getOwners());
+                }
+            }
+        }
+        return searchingList;
+    }
 }
