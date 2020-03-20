@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 
 public class ErrorDto {
 
-    private HttpStatus errorMessage;
+    private String errorMessage;
 
-    public ErrorDto(HttpStatus errorMessage) {
+    public ErrorDto(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
-    public HttpStatus getErrorMessage() {
+    public String getErrorMessage() {
         return errorMessage;
     }
 }

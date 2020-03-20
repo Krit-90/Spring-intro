@@ -6,15 +6,20 @@ import com.gleb.springintrodiction.service.OwnerService;
 import com.gleb.springintrodiction.util.HttpUtils;
 import com.gleb.springintrodiction.util.XmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
+
 @RestController
 public class OwnersController {
     @Autowired
     private OwnerService ownerService;
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping("/owners")
     public ResponseEntity getOwnersByFirstNameAndLastName(@RequestParam(required = false) String firstName,
@@ -35,24 +40,23 @@ public class OwnersController {
 
 
     @PutMapping("/owners")
-    public ResponseEntity updateOwner(@RequestParam(name = "id") Long id,
+    public ResponseEntity updateOwner(Locale locale, @RequestParam(name = "id") Long id,
                                       @RequestBody OwnerDto ownerDto) {
         boolean isSucceed = ownerService.updateOwner(id, ownerDto);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         }
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR));
+        String message = messageSource.getMessage("error.server", null, locale);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(message));
     }
 
     @DeleteMapping("/owners")
-    public ResponseEntity removeOwner(@RequestParam(name = "id") Long id) {
+    public ResponseEntity removeOwner(Locale locale, @RequestParam(name = "id") Long id) {
         boolean isSucceed = ownerService.removeOwner(id);
         if (isSucceed) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+            String message = messageSource.getMessage("error.server", null, locale);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(message));        }
     }
 }
