@@ -30,16 +30,13 @@ public class CarsController {
             CarDto carDto1 = new ObjectMapper().readValue(carDto, CarDto.class);*/
 
     @GetMapping("/cars")
-    public ResponseEntity getCarsByYearAndModel(Locale locale, CarDto carDto)
-            throws JsonProcessingException {
+    public ResponseEntity getCarsByYearAndModel(Locale locale, CarDto carDto) {
         String accept = HttpUtils.getHttpHeader(HttpHeaders.ACCEPT);
         if (accept.contains("application/xml")) {
             String content = XmlUtil.convertToXml(carsService.getCarsByModelAndYear(carDto));
-            return ResponseEntity.ok(content.concat(messageSource.getMessage("error.server", null,
-                    locale)));
+            return ResponseEntity.ok(content);
         }
-//        return ResponseEntity.ok(carsService.getCarsByModelAndYear(carDto));
-        return ResponseEntity.ok(messageSource.getMessage("error.server", null, locale));
+        return ResponseEntity.ok(carsService.getCarsByModelAndYear(carDto));
     }
 
     @PostMapping("/cars")
