@@ -30,6 +30,7 @@ public class CarsController {
             CarDto carDto1 = new ObjectMapper().readValue(carDto, CarDto.class);*/
 
     @GetMapping("/cars")
+    // TODO: Неиспользуемый параметр
     public ResponseEntity getCarsByYearAndModel(Locale locale, CarDto carDto) {
         String accept = HttpUtils.getHttpHeader(HttpHeaders.ACCEPT);
         if (accept.contains("application/xml")) {
@@ -52,6 +53,7 @@ public class CarsController {
         if (isSucceed) {
             return ResponseEntity.ok().build();
         }
+        // TODO: Вообще можно вынести это в отдельный сервис/утилитарный класс, второй параметр сделать опциональным через arg..., а locale доставать из LocaleContextHolder
         String message = messageSource.getMessage("error.server", null, locale);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto(message));
     }

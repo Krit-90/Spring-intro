@@ -34,6 +34,7 @@ public class SpringIntrodictionApplicationTest {
     public void chainOfDispatcherControllerServiceRepositoryDB() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(carsController).build();
         CarDto carDto = new CarDto("Volvo", 2010);
+        // TODO: Теперь тебе нужно достать ответ из mockMvc и использовать его для проверок ожидаемого/действительного, а не просто дернуть сервисы
         mockMvc.perform(MockMvcRequestBuilders.post("/cars").contentType(MediaType.APPLICATION_JSON)
         .content(asJsonString(carDto)));
         List<CarDto> actual = carsService.getCarsByModelAndYear(new CarDto("Volvo", 2010));
