@@ -39,12 +39,13 @@ class CarsServiceImplTest {
 
     @Test
     void findOwnersOfCarsByAgeWithNullFields() {
-        Mockito.verify(carRepository, Mockito.times(0))
-                .findCarsByModelAndYear(null, null);
         List<Owner> actual = carsService.findOwnersOfCarsByAge(new CarDto(null, null));
         actual.forEach(owner -> Assertions.assertEquals(new Owner("unknown", "car"), owner));
     }
 
+    // TODO: По факту это три одинаковых теста findOwnersOfCardByAgeTest, нет смысла выносить в три разных теста
+    //  А когда ты писал, что тесты должны покрывать все возможные сценарии в рамках этого метода, ты разве не
+    //  имел ввиду, что все условия проверить, например здесь условия свитча?
     @Test
     void findOwnersOfCarsByAge1967() {
         List<Owner> actual = carsService.findOwnersOfCarsByAge(new CarDto("Mustang", 1967));

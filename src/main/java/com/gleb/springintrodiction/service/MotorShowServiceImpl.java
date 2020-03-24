@@ -5,7 +5,6 @@ import com.gleb.springintrodiction.dto.MotorShowDto;
 import com.gleb.springintrodiction.repository.MotorShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,24 +17,17 @@ public class MotorShowServiceImpl implements MotorShowService {
     private CarsService carsService;
 
     @Override
-    public List<MotorShowDto> getMotorShowDtoDB() {
-        return motorShowRepository.findAll().stream()
-                .map(motorShow -> new MotorShowDto(motorShow.getTitle(), motorShow.getCity(),
-                 carsService.carsModelStringList(motorShow.getCars())))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public void addMotorShow(MotorShowDto motorShowDto) {
         motorShowRepository.save(new MotorShow(motorShowDto.getTitle(), motorShowDto.getCity()));
     }
 
     @Override
-    public List<MotorShowDto> getMotorShowByTitleAndCity(String title, String city) {
-        if(title == null & city == null){
-            return getMotorShowDtoDB();
+    public List<MotorShowDto> getMotorShowByTitleAndCity(MotorShowDto motorShowDto) {
+        if (motorShowDto.getTitle() == null & motorShowDto.getCity() == null) {
+            return mapMotorShowToMotorShowDto(motorShowRepository.findAll());
         }
-        return mapMotorShowToMotorShowDto(motorShowRepository.findByTitleAndCity(title, city));
+        return mapMotorShowToMotorShowDto(motorShowRepository.findByTitleAndCity(motorShowDto.getTitle(),
+                motorShowDto.getCity()));
     }
 
     @Override
@@ -60,6 +52,6 @@ public class MotorShowServiceImpl implements MotorShowService {
     public List<MotorShowDto> mapMotorShowToMotorShowDto(List<MotorShow> motorShowList) {
         return motorShowList.stream().map(motorShow -> new MotorShowDto(motorShow.getTitle(), motorShow.getCity(),
                 carsService.carsModelStringList(motorShow.getCars())))
-               .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 }

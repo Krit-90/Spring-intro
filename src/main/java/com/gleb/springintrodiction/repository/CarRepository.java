@@ -13,7 +13,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findCarsByYear(Integer year);
     List<Car> findCarsByModelAndYear(String model, Integer year);
 
-    @Query(value = "SELECT * FROM Cars c WHERE c.id = ?", nativeQuery = true)
+    @Query(value = "SELECT * FROM Cars WHERE id = ?", nativeQuery = true)
     Car findCarsById(Long id);
     @Query(value = "UPDATE Cars SET motor_show_id = ? WHERE id=?", nativeQuery = true)
     void updateMotorShowId(Long motorShowId, Long id);

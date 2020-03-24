@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
-    List<Owner> findOwnersByFirstNameAndLastName(String firstName, String lastName);
 
-    @Query(value = "SELECT * FROM Owners o WHERE o.id = id", nativeQuery = true)
+    List<Owner> findOwnersByFirstNameAndLastName(String firstName, String lastName);
+    @Query(value = "SELECT * FROM Owners o WHERE o.id = ?", nativeQuery = true)
     Owner findOwnersById(Long id);
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Owners  SET first_name = ?, last_name = ? WHERE id=?", nativeQuery = true)

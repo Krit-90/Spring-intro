@@ -6,29 +6,21 @@ import com.gleb.springintrodiction.dto.MotorShowDto;
 import java.util.List;
 
 public interface MotorShowService {
-    /**
-     * Метод получения всего списка автосалонов
-     *
-     * @return БД автосалонов
-     */
-    List<MotorShowDto> getMotorShowDtoDB();
 
     /**
      * Метод добавления автосалона в БД
      *
      * @param motorShowDto ДТО автосалона
-     * @return
      */
     void addMotorShow(MotorShowDto motorShowDto);
 
     /**
-     * Метод получения списка автосалон с соответствующими названием и городом
+     * Метод получения списка автосалононов с соответствующими названием и городом
      *
-     * @param title Название автосалона
-     * @param city  Город автосалона
+     * @param motorShowDto Дто автосалона, из которого берем данные
      * @return Отфильтрованный список автосалонов
      */
-    List<MotorShowDto> getMotorShowByTitleAndCity(String title, String city);
+    List<MotorShowDto> getMotorShowByTitleAndCity(MotorShowDto motorShowDto);
 
     /**
      * *Метод изменения названия и/или города автосалона

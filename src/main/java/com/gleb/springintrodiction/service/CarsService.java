@@ -8,17 +8,9 @@ import com.gleb.springintrodiction.dto.CarDto;
 public interface CarsService {
 
     /**
-     * Метод получения всего списка машин
-     *
-     * @return БД машин
-     */
-    List<CarDto> getCarsDtoDB();
-
-    /**
      * Метод добавления машины в БД
      *
      * @param carDto ДТО машины
-     * @return
      */
     void addCar(CarDto carDto);
 

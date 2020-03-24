@@ -18,24 +18,17 @@ public class OwnerServiceImpl implements OwnerService {
     private CarsService carsService;
 
     @Override
-    public List<OwnerDto> getOwnerDtoDB() {
-        return ownerRepository.findAll().stream()
-                .map(owner -> new OwnerDto(owner.getFirstName(), owner.getLastName(),
-                 carsService.carsModelStringList(owner.getCars())))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public void addOwner(OwnerDto ownerDto) {
         ownerRepository.save(new Owner(ownerDto.getFirstName(), ownerDto.getLastName()));
     }
 
     @Override
-    public List<OwnerDto> getOwnerByFirstNameAndLastName(String firstName, String lastName) {
-        if(firstName == null & lastName == null){
-            return getOwnerDtoDB();
+    public List<OwnerDto> getOwnerByFirstNameAndLastName(OwnerDto ownerDto) {
+        if(ownerDto.getFirstName() == null & ownerDto.getLastName() == null & ownerDto.getCarsDtosModel() == null) {
+            return mapOwnerToOwnerDto(ownerRepository.findAll());
         }
-        return mapOwnerToOwnerDto(ownerRepository.findOwnersByFirstNameAndLastName(firstName, lastName));
+        return mapOwnerToOwnerDto(ownerRepository.findOwnersByFirstNameAndLastName(ownerDto.getFirstName(),
+                ownerDto.getLastName()));
     }
 
     @Transactional

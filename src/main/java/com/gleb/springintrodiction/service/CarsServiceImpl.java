@@ -24,11 +24,6 @@ public class CarsServiceImpl implements CarsService {
     @Autowired
     private OwnerRepository ownerRepository;
 
-
-    public List<CarDto> getCarsDtoDB() {
-        return mapCarToCarDto(carRepository.findAll());
-    }
-
     @Override
     public void addCar(CarDto carDto) {
         carRepository.save(new Car(carDto.getModel(), carDto.getYear()));
@@ -52,10 +47,8 @@ public class CarsServiceImpl implements CarsService {
 
     @Override
     public List<CarDto> getCarsByModelAndYear(CarDto carDto) {
-        if (carDto == null) {
-            List<Car> result = carRepository.findAll();
-            return result.stream().map(car1 -> new CarDto(car1.getModel(), car1.getYear(),
-                    car1.getMotorShow().getTitle())).collect(Collectors.toList());
+        if (carDto.getModel() == null & carDto.getYear() == null & carDto.getMotorShowTitle() == null) {
+            return mapCarToCarDto(carRepository.findAll());
         }
         Car car;
         if (carDto.getMotorShowTitle() != null) {
@@ -118,7 +111,7 @@ public class CarsServiceImpl implements CarsService {
             }
         }
         for (Car car : carRepository.findAll()) {
-            if (car.getModel() == carDto.getModel() & car.getYear().equals(carDto.getYear())) {
+            if (car.getModel().equals(carDto.getModel()) & car.getYear().equals(carDto.getYear())) {
                 switch (car.getYear()) {
                     case 1967: searchingList.add(car.getOwners().get(0));
                     break;

@@ -6,29 +6,21 @@ import com.gleb.springintrodiction.dto.OwnerDto;
 import java.util.List;
 
 public interface OwnerService {
-    /**
-     * Метод получения всего списка владельцев машин
-     *
-     * @return БД владельцев
-     */
-    List<OwnerDto> getOwnerDtoDB();
 
     /**
      * Метод добавления владельца в БД
      *
      * @param ownerDto ДТО владельца
-     * @return
      */
     void addOwner(OwnerDto ownerDto);
 
     /**
      * Метод получения списка владельцев машин с соответствующими именем и фамилией
      *
-     * @param firstName Имя владельца
-     * @param lastName  Фамилия владельца
+     * @param ownerDto Дто владельца, из которого берем искомые данные
      * @return Отфильтрованный список владельцев машин
      */
-    List<OwnerDto> getOwnerByFirstNameAndLastName(String firstName, String lastName);
+    List<OwnerDto> getOwnerByFirstNameAndLastName(OwnerDto ownerDto);
 
     /**
      * *Метод изменения имени и/или фамилии машины

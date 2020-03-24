@@ -10,10 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -30,7 +32,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
         System.out.println("Найден User: " + user);
         List<String> roleNames = roleRepository.getRoleUser(user.getId());
-        List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> grantList = new ArrayList<>();
         if (roleNames != null) {
             for (String role : roleNames) {
                 GrantedAuthority authority = new SimpleGrantedAuthority(role);

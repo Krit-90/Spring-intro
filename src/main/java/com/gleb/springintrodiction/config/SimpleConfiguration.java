@@ -22,6 +22,12 @@ public class SimpleConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    protected UserDetailsService userDetailsService() {
+        return myUserDetailsService;
+    }
+
+    // TODO: не слушается ограничений в ролях, там где только ADMIN никто не может зайти, а где оба может зайти лишь USER
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
